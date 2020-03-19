@@ -1,0 +1,14 @@
+#tests
+coverage-ts
+
+#linters
+.eslintrc.js
+.eslintignore
+.prettierrc.js
+
+#editor settings
+.vscode
+.editorconfig
+
+#compilers
+tsconfig.json

@@ -1,0 +1,62 @@
+{
+  "name": "typescript-coverage-report",
+  "version": "0.1.0",
+  "description": "Node command tool to generate TypeScript coverage report.",
+  "main": "dist/lib/index.js",
+  "bin": {
+    "typescript-coverage-report": "dist/bin/typescript-coverage-report.js"
+  },
+  "repository": "git@github.com:alexcanessa/typescript-coverage-report.git",
+  "author": "Alex Canessa <canessa.alex@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "colors": "^1.4.0",
+    "commander": "^5.0.0",
+    "ncp": "^2.0.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "semantic-ui-react": "^0.88.2",
+    "terminal-table": "^0.0.12",
+    "type-coverage-core": "^2.4.1",
+    "typescript": "^3.8.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "type-coverage": "node ./dist/bin/typescript-coverage-report"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@testing-library/react": "^10.0.1",
+    "@types/ncp": "^2.0.3",
+    "@types/node": "^13.9.2",
+    "@types/react": "^16.9.23",
+    "@types/react-dom": "^16.9.5",
+    "@typescript-eslint/eslint-plugin": "^2.25.0",
+    "@typescript-eslint/parser": "^2.25.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.19.0",
+    "husky": "^4.2.3",
+    "jest": "^25.1.0",
+    "lint-staged": "^10.0.8",
+    "prettier": "^2.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ],
+    "*.{js,ts,tsx,json,md,css}": [
+      "prettier --write"
+    ]
+  }
+}

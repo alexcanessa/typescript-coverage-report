@@ -1,0 +1,10 @@
+{
+  "editor.formatOnSave": true,
+  "eslint.enable": true,
+  "editor.rulers": [80],
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
+}
