@@ -10,5 +10,6 @@
     "skipLibCheck": true,
     "inlineSourceMap": true,
     "jsx": "react"
-  }
+  },
+  "exclude": ["**/__tests__/*.test.ts?x"]
 }

@@ -5,7 +5,7 @@ import { CoverageData } from "../../lib/getCoverage";
 
 const headers = ["Filename", "Percent", "Total", "Covered", "Uncovered"];
 
-type Props = CoverageData & {
+type Props = Omit<CoverageData, "anys"> & {
   threshold: number;
 };
 
