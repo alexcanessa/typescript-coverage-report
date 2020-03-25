@@ -1,6 +1,7 @@
 # TypeScript coverage report
 
 [![npm version](https://badge.fury.io/js/typescript-coverage-report.svg)](https://badge.fury.io/js/typescript-coverage-report)
+[![npm downloads](https://img.shields.io/npm/dw/typescript-coverage-report?style=flat-square)](https://www.npmjs.com/package/typescript-coverage-report)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
@@ -12,7 +13,7 @@ This package fills the gap of a missing type coverage reporting tool which is pr
 
 ### See Also
 
-I've published an article on [How did I build a TS coverage report tool](https://medium.com/@alexcanessa/how-did-i-build-a-ts-coverage-report-tool-af34e110d02c?sk=de2eb6c78e581aa8d9979629300873b3), which explains more the roadmap and the resoning.
+I've published an article on [How I built a TS coverage report tool](https://medium.com/@alexcanessa/how-did-i-build-a-ts-coverage-report-tool-af34e110d02c?sk=de2eb6c78e581aa8d9979629300873b3), which explains more the roadmap and the resoning.
 
 ## Install
 
