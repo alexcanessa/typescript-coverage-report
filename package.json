@@ -24,7 +24,8 @@
   "scripts": {
     "build": "tsc",
     "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "type-coverage": "node ./dist/bin/typescript-coverage-report"
+    "type-coverage": "node ./dist/bin/typescript-coverage-report",
+    "prepublish": "yarn build"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
