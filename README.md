@@ -55,13 +55,15 @@ To set the minimum threshold _(80% by default)_, use the `--threshold` option.
 $ yarn ts-coverage --threshold=99
 ```
 
-As an alternative, options may be provided through the `type-coverage` [configuration](https://github.com/plantain-00/type-coverage#config-in-packagejson), specified in `package.json`.
+As an alternative, ~~options~~\* `atLeast` may be provided through the `type-coverage` [configuration](https://github.com/plantain-00/type-coverage#config-in-packagejson), specified in `package.json`.
 
 ```json
 "typeCoverage": {
   "atLeast": 90
 }
 ```
+
+<super>\*</super> At this time, only `atLeast` is supported. Please feel free to contribute 🤘
 
 ![terminal table](docs/screenshot-table.png)
 
