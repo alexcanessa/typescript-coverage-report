@@ -21,10 +21,10 @@ You can install it globally or locally.
 My advice is to install it as a project dependency and create a script in your `package.json`.
 
 ```shell
-yarn add --dev typescript-coverage-tool
+yarn add --dev typescript-coverage-report
 
 # npm users
-npm install --save-dev typescript-coverage-tool
+npm install --save-dev typescript-coverage-report
 ```
 
 ## Usage
