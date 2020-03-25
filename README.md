@@ -1,7 +1,7 @@
 # TypeScript coverage report
 
 [![npm version](https://badge.fury.io/js/typescript-coverage-report.svg)](https://badge.fury.io/js/typescript-coverage-report)
-[![npm downloads](https://img.shields.io/npm/dw/typescript-coverage-report?style=flat-square)](https://www.npmjs.com/package/typescript-coverage-report)
+[![npm downloads](https://img.shields.io/npm/dw/typescript-coverage-report.svg)](https://www.npmjs.com/package/typescript-coverage-report)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
