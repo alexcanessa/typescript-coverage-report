@@ -66,11 +66,11 @@ As an alternative, options may be provided through the `type-coverage` [configur
 }
 ```
 
-![terminal table](docs/screenshot-table.png)
+![terminal table](images/screenshot-table.png)
 
-![summary page](docs/screenshot-summary.png)
+![summary page](images/screenshot-summary.png)
 
-![details page](docs/screenshot-details.png)
+![details page](images/screenshot-details.png)
 
 ## Options
 

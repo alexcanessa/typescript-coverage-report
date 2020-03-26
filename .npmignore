@@ -13,3 +13,6 @@ coverage-ts
 
 #compilers
 tsconfig.json
+
+#source
+src
