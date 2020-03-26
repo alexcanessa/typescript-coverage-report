@@ -1,12 +1,12 @@
 # TypeScript Coverage Report
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![npm version](https://badge.fury.io/js/typescript-coverage-report.svg)](https://badge.fury.io/js/typescript-coverage-report)
 [![npm downloads](https://img.shields.io/npm/dw/typescript-coverage-report.svg)](https://www.npmjs.com/package/typescript-coverage-report)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Node command line tool for generating TypeScript coverage reports ✨
 
@@ -93,17 +93,7 @@ Feel free to dive in! [Open an issue](https://github.com/alexcanessa/typescript-
 
 On this project we follow the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/1/3/0/code-of-conduct/).
 
-### Commit messages
-
-This project follows the [Angular commit messages](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit), but it's very open to emojis 🤯.
-
-## Licence
-
-[MIT](https://spdx.org/licenses/MIT.html) @ Alessandro Canessa
-
-[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
-
-## Contributors ✨
+### Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
@@ -121,3 +111,13 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+### Commit messages
+
+This project follows the [Angular commit messages](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit), but it's very open to emojis 🤯.
+
+## Licence
+
+[MIT](https://spdx.org/licenses/MIT.html) @ Alessandro Canessa
+
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
