@@ -18,7 +18,9 @@ export default async function generateCoverageReport(
   options: Options
 ): Promise<CoverageData> {
   // NOTE: Cleanup the folder
-  fs.rmdirSync(path.join(process.cwd(), "coverage-ts"), { recursive: true });
+  fs.rmdirSync(path.join(process.cwd(), options.outputDir), {
+    recursive: true
+  });
 
   const data = await getCoverage({
     strict: options.strict,
@@ -30,7 +32,7 @@ export default async function generateCoverageReport(
   await generateHTML(data, options);
   await asyncNcp(
     path.join(__dirname, "../../assets"),
-    path.join(process.cwd(), "coverage-ts/assets")
+    path.join(process.cwd(), options.outputDir, "assets")
   );
 
   return data;
