@@ -102,7 +102,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/tsaiDavid"><img src="https://avatars3.githubusercontent.com/u/12259854?v=4" width="100px;" alt=""/><br /><sub><b>David Tsai</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=tsaiDavid" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/tsaiDavid"><img src="https://avatars3.githubusercontent.com/u/12259854?v=4" width="100px;" alt=""/><br /><sub><b>David Tsai</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=tsaiDavid" title="Documentation">📖</a> <a href="https://github.com/alexcanessa/typescript-coverage-report/issues?q=author%3AtsaiDavid" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
