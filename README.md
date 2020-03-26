@@ -60,11 +60,11 @@ or, following the [`type-coverage configuration`](https://github.com/plantain-00
 }
 ```
 
-![terminal table](docs/screenshot-table.png)
+![terminal table](images/screenshot-table.png)
 
-![summary page](docs/screenshot-summary.png)
+![summary page](images/screenshot-summary.png)
 
-![details page](docs/screenshot-details.png)
+![details page](images/screenshot-details.png)
 
 ## Options
 
