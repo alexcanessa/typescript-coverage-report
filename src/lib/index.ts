@@ -18,9 +18,13 @@ export default async function generateCoverageReport(
   options: Options
 ): Promise<CoverageData> {
   // NOTE: Cleanup the folder
-  fs.rmdirSync(path.join(process.cwd(), options.outputDir), {
-    recursive: true
-  });
+  const dirPath = path.join(process.cwd(), options.outputDir);
+
+  if (fs.readdirSync(dirPath)) {
+    fs.rmdirSync(dirPath, {
+      recursive: true
+    });
+  }
 
   const data = await getCoverage({
     strict: options.strict,
