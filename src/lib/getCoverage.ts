@@ -26,11 +26,12 @@ const getCoverage = async (
     ...options,
     fileCounts: true
   });
+  const percentage = totalCount === 0 ? 100 : (correctCount * 100) / totalCount;
 
   return {
     fileCounts,
     anys,
-    percentage: (correctCount * 100) / totalCount,
+    percentage,
     total: totalCount,
     covered: correctCount,
     uncovered: totalCount - correctCount
