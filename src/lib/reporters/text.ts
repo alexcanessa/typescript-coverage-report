@@ -8,8 +8,19 @@ const coverageTable = new Table({
   borderStyle: 2
 });
 
-const calculatePercantage = (correct: number, total: number): string => {
-  return `${((correct * 100) / total).toFixed(2)} %`;
+const calculatePercantage = (correct: number, total: number): number => {
+  if (total === 0) {
+    return 100;
+  }
+
+  return (correct * 100) / total;
+};
+
+const calculatePercantageWithString = (
+  correct: number,
+  total: number
+): string => {
+  return `${calculatePercantage(correct, total).toFixed(2)}%`;
 };
 
 export const generate = (
@@ -49,7 +60,7 @@ export const generate = (
 
       coverageTable.push([
         filename,
-        calculatePercantage(correctCount, totalCount),
+        calculatePercantageWithString(correctCount, totalCount),
         totalCount,
         correctCount,
         totalCount - correctCount
@@ -59,7 +70,8 @@ export const generate = (
         { row: [row] },
         {
           color:
-            Math.floor((correctCount * 100) / totalCount) >= threshold
+            Math.floor(calculatePercantage(correctCount, totalCount)) >=
+            threshold
               ? "green"
               : "red"
         }

@@ -55,7 +55,8 @@ const SummaryPage = ({
         <Table.Body>
           {Array.from(fileCounts).map(
             ([filename, { correctCount, totalCount }], index) => {
-              const percentage = (correctCount * 100) / totalCount;
+              const percentage =
+                totalCount === 0 ? 100 : (correctCount * 100) / totalCount;
               const percentageCoverage = percentage.toFixed(2) + "%";
               const isValid = percentage >= threshold;
 
