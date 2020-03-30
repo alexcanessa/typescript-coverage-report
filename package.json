@@ -16,6 +16,7 @@
     "ncp": "^2.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "rimraf": "^3.0.2",
     "semantic-ui-react": "^0.88.2",
     "terminal-table": "^0.0.12",
     "type-coverage-core": "^2.4.1",

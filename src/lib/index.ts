@@ -6,6 +6,7 @@ import fs from "fs";
 import { ncp } from "ncp";
 import { promisify } from "util";
 import { LintOptions } from "type-coverage-core";
+import rimraf from "rimraf";
 
 const asyncNcp = promisify(ncp);
 
@@ -20,10 +21,8 @@ export default async function generateCoverageReport(
   // NOTE: Cleanup the folder
   const dirPath = path.join(process.cwd(), options.outputDir);
 
-  if (fs.readdirSync(dirPath)) {
-    fs.rmdirSync(dirPath, {
-      recursive: true
-    });
+  if (fs.existsSync(dirPath)) {
+    rimraf.sync(dirPath);
   }
 
   const data = await getCoverage({
