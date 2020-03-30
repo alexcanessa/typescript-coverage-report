@@ -27,7 +27,8 @@
     "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "type-coverage": "node ./dist/bin/typescript-coverage-report",
     "docs": "yarn type-coverage --outputDir docs",
-    "prepublish": "yarn lint && yarn build"
+    "prepublish": "yarn lint && yarn build",
+    "release": "gren release"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -51,6 +52,7 @@
     "eslint-plugin-jest": "^23.8.2",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-react": "^7.19.0",
+    "github-release-notes": "^0.17.1",
     "husky": "^4.2.3",
     "jest": "^25.1.0",
     "lint-staged": "^10.0.8",
