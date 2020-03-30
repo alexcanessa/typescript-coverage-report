@@ -14,6 +14,15 @@
         "doc",
         "bug"
       ]
+    },
+    {
+      "login": "OmgImAlexis",
+      "name": "Alexis Tyler",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/6525926?v=4",
+      "profile": "https://wvvw.me",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
