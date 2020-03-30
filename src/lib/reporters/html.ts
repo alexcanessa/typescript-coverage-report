@@ -79,7 +79,6 @@ export const generate = async (
   data: CoverageData,
   options?: Options
 ): Promise<void> => {
-  const assetsFolder = path.relative("index.html", "assets");
   // NOTE: Create index file
   const fileContent = wrapHTMLContent(
     SummaryPage,
@@ -92,7 +91,7 @@ export const generate = async (
       threshold: options.threshold
     },
     {
-      assets: includeAssets([path.join(assetsFolder, "source-file.css")])
+      assets: includeAssets([path.join("assets", "source-file.css")])
     }
   );
 
