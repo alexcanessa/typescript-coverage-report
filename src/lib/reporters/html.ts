@@ -91,7 +91,7 @@ export const generate = async (
       threshold: options.threshold
     },
     {
-      assets: includeAssets([path.join("assets", "source-file.css")])
+      assets: includeAssets(["./assets/source-file.css"])
     }
   );
 
