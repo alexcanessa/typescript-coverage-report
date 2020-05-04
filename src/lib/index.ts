@@ -1,6 +1,7 @@
 import getCoverage, { CoverageData } from "./getCoverage";
 import { generate as generateText } from "./reporters/text";
 import { generate as generateHTML } from "./reporters/html";
+import { generate as generateJSON } from "./reporters/json";
 import path from "path";
 import fs from "fs";
 import { ncp } from "ncp";
@@ -37,6 +38,8 @@ export default async function generateCoverageReport(
     path.join(__dirname, "../../assets"),
     path.join(process.cwd(), options.outputDir, "assets")
   );
+
+  await generateJSON(data, options);
 
   return data;
 }
