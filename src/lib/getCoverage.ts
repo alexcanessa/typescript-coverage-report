@@ -19,11 +19,28 @@ export type CoverageData = {
   uncovered: number;
 };
 
-const getCoverage = async (
-  options?: Pick<LintOptions, "strict" | "debug">
-): Promise<CoverageData> => {
+export type Options = Partial<
+  Pick<LintOptions, "strict" | "debug" | "ignoreFiles"> & {
+    cache: LintOptions["enableCache"];
+    ignoreUnread: LintOptions["ignoreUnreadAnys"];
+  }
+>;
+
+const getCoverage = async (options?: Options): Promise<CoverageData> => {
+  const {
+    strict,
+    debug,
+    ignoreFiles,
+    cache: enableCache,
+    ignoreUnread: ignoreUnreadAnys
+  } = options || {};
+
   const { anys, fileCounts, totalCount, correctCount } = await lint(".", {
-    ...options,
+    strict,
+    debug,
+    ignoreFiles,
+    enableCache,
+    ignoreUnreadAnys,
     fileCounts: true
   });
   const percentage = totalCount === 0 ? 100 : (correctCount * 100) / totalCount;

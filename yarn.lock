@@ -8062,15 +8062,20 @@ trim-off-newlines@^1.0.0:
   resolved "https://registry.yarnpkg.com/trim-off-newlines/-/trim-off-newlines-1.0.1.tgz#9f9ba9d9efa8764c387698bcbfeb2c848f11adb3"
   integrity sha1-n5up2e+odkw4dpi8v+sshI8RrbM=
 
-ts-lib-utils@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/ts-lib-utils/-/ts-lib-utils-2.2.0.tgz#dbf198ba67e2fee027f36bd2f9c0cbd638ed1731"
-  integrity sha512-yfZWuQs5bfQA2RLJdHUOSL2+Iw4NcZ8eKglVVW25aXi3sdLEoJxHB3tC2CN+x4MY4X39tcFCGlE5V7IF8O3m8w==
+ts-lib-utils@^2.14.2:
+  version "2.14.2"
+  resolved "https://registry.yarnpkg.com/ts-lib-utils/-/ts-lib-utils-2.14.2.tgz#f17404597f3b09b05b12380f179f063840d63ed9"
+  integrity sha512-ba79cNhVdcyBfkAbrQXrgeFoojN1w55tR0uMdEShLzAcj+uiDHLrqxBzaoy5aubCb2cm3MjMCuL4AUd6XhGASg==
   dependencies:
     glob "7"
-    tslib "1"
+    tslib "1 || 2"
 
-tslib@1, tslib@^1.8.1, tslib@^1.9.0:
+"tslib@1 || 2":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.0.3.tgz#8e0741ac45fc0c226e58a17bfc3e64b9bc6ca61c"
+  integrity sha512-uZtkfKblCEQtZKBF6EBXVZeQNl82yqtDQdv+eck8u7tdPxjLu2/lp5/uPW+um2tpuxINHWy3GhiccY7QgEaVHQ==
+
+tslib@^1.8.1, tslib@^1.9.0:
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.11.1.tgz#eb15d128827fbee2841549e171f45ed338ac7e35"
   integrity sha512-aZW88SY8kQbU7gpV19lN24LtXh/yD4ZZg6qieAJDDg+YBsJcSmLGK9QpnUjAKVG/xefmvJGd1WUmfpT/g6AJGA==
@@ -8101,14 +8106,14 @@ type-check@~0.3.2:
   dependencies:
     prelude-ls "~1.1.2"
 
-type-coverage-core@^2.4.1:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/type-coverage-core/-/type-coverage-core-2.4.1.tgz#ae016cfc6854d655d0e04b163c1eb3d271825edc"
-  integrity sha512-jDzvZBj6nU8Mn+M8frgboN3YwaH3Clb06Y8z50m4l/533RTU2iIJoFgm6i0y5jkSZbK6wl5Bb7PPdKYLqlQOmg==
+type-coverage-core@^2.14.2:
+  version "2.14.2"
+  resolved "https://registry.yarnpkg.com/type-coverage-core/-/type-coverage-core-2.14.2.tgz#a58759a7f0672f0c3f9e0f3e0b5f9ce61bcfa96c"
+  integrity sha512-v/t/VYA2+3jxRZdbbkCSN6CvP1sZAOyVqcfrISyoYSSk1YdU3h49iUHVcnHgKQaKKhs5WSHwz3x4UptTD5fI6g==
   dependencies:
     minimatch "3"
-    ts-lib-utils "^2.2.0"
-    tslib "1"
+    ts-lib-utils "^2.14.2"
+    tslib "1 || 2"
     tsutils "3"
 
 type-detect@4.0.8:

@@ -3,13 +3,18 @@
 import { program } from "commander";
 import generateCoverageReport from "../lib";
 import getOptions from "../lib/getOptions";
+import path from "path";
 
 const {
   version,
-  description,
-  typeCoverage = {}
+  description
   // eslint-disable-next-line @typescript-eslint/no-var-requires
 } = require("../../package.json");
+
+const {
+  typeCoverage = {}
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+} = require(path.join(process.cwd(), "/package.json"));
 
 const argvWithVersion = (argvs: string[]): string[] => {
   const vPos = argvs.indexOf("-v");
@@ -21,22 +26,47 @@ const argvWithVersion = (argvs: string[]): string[] => {
   return argvs;
 };
 
+const {
+  atLeast = 80,
+  strict = false,
+  debug = false,
+  cache = false,
+  ignoreFiles = false,
+  ignoreUnread = false,
+  outputDir = "coverage-ts"
+} = typeCoverage;
+
 program
   .version(version)
   .description(description)
   .option(
     "-o, --outputDir [string]",
-    "The output directory where to generate the report.",
-    "coverage-ts"
+    "the output directory where to generate the report.",
+    outputDir
   )
   .option(
     "-t, --threshold [number]",
-    "The minimum percentage of coverage required.",
+    "the minimum percentage of coverage required.",
     parseFloat,
-    typeCoverage.atLeast || 80
+    atLeast
   )
-  .option("-s, --strict [boolean]", "Run the check in strict mode.", false)
-  .option("-d, --debug [boolean]", "Show debug information.", false)
+  .option("-s, --strict [boolean]", "run the check in strict mode.", strict)
+  .option("-d, --debug [boolean]", "show debug information.", debug)
+  .option(
+    "-c, --cache [boolean]",
+    "save and reuse type check result from cache.",
+    cache
+  )
+  .option(
+    "-i, --ignore-files [string[]]",
+    'ignore specified files, eg: --ignore-files "demo1/*.ts" --ignore-files "demo2/foo.ts"',
+    ignoreFiles
+  )
+  .option(
+    "-u, --ignore-unread [boolean]",
+    "allow writes to variables with implicit any types",
+    ignoreUnread
+  )
   .parse(argvWithVersion(process.argv));
 
 const options = getOptions(program);

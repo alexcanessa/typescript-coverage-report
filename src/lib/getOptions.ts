@@ -1,5 +1,5 @@
 import { Option } from "commander";
-import { Options } from "./";
+import { ProgramOptions } from "./";
 
 type CommandOption = Option & {
   defaultValue?: string;
@@ -19,7 +19,7 @@ const getOptions = (program: any) => {
         [getOptionName(option)]:
           program[getOptionName(option)] || option.defaultValue
       };
-    }, {}) as Options;
+    }, {}) as ProgramOptions;
 };
 
 export default getOptions;
