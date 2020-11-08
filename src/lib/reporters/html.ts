@@ -124,9 +124,9 @@ export const generate = async (
       {
         title: path.basename(filename),
         assets: includeAssets([
-          "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js",
-          "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/mode/javascript/javascript.min.js",
-          "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.css",
+          "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/mode/javascript/javascript.min.js",
+          "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.css",
           path.join(assetsFolder, "source-file.js"),
           path.join(assetsFolder, "source-file.css")
         ])
