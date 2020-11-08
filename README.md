@@ -99,6 +99,19 @@ Feel free to dive in! [Open an issue](https://github.com/alexcanessa/typescript-
 
 On this project we follow the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/1/3/0/code-of-conduct/).
 
+### Developing
+
+Thanks for contributing!
+
+Remember to run the following commands to link your version of this package and build the TypeScript files.
+
+```bash
+# Link the package globally, so you'll be able to test it in other projects.
+$ yarn link
+# Builds the TypeScript files and watches for changes
+$ yarn build --watch
+```
+
 ### Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
