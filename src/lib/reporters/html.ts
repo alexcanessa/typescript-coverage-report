@@ -91,7 +91,10 @@ export const generate = async (
       threshold: options.threshold
     },
     {
-      assets: includeAssets(["./assets/source-file.css"])
+      assets: includeAssets([
+        "./assets/source-file.css",
+        "https://cdn.jsdelivr.net/npm/sorttable@1.0.2/sorttable.min.js"
+      ])
     }
   );
 
