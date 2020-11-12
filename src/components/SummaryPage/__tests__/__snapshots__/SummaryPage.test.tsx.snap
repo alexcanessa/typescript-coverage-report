@@ -92,7 +92,7 @@ exports[`SummaryPage component renders correctly 1`] = `
     Files
   </h2>
   <table
-    class="ui celled table"
+    class="ui celled table sortable"
     style="margin-top: 2em;"
   >
     <thead
