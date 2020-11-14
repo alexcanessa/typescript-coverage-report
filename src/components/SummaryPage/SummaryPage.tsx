@@ -44,7 +44,7 @@ const SummaryPage = ({
         </Table.Body>
       </Table>
       <Header as="h2">Files</Header>
-      <Table celled style={{ marginTop: "2em" }}>
+      <Table celled style={{ marginTop: "2em" }} className="sortable">
         <Table.Header>
           <Table.Row>
             {headers.map((header, index) => (
