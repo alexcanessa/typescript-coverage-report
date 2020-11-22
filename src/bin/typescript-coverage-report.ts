@@ -32,6 +32,7 @@ const {
   debug = false,
   cache = false,
   ignoreFiles = false,
+  ignoreCatch = false,
   ignoreUnread = false,
   outputDir = "coverage-ts"
 } = typeCoverage;
@@ -61,6 +62,11 @@ program
     "-i, --ignore-files [string[]]",
     'ignore specified files, eg: --ignore-files "demo1/*.ts" --ignore-files "demo2/foo.ts"',
     ignoreFiles
+  )
+  .option(
+    "--ignore-catch [boolean]",
+    "ignore type any for (try-)catch clause variable",
+    ignoreCatch
   )
   .option(
     "-u, --ignore-unread [boolean]",

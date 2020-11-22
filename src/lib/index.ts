@@ -10,10 +10,14 @@ import rimraf from "rimraf";
 
 const asyncNcp = promisify(ncp);
 
-export type ProgramOptions = Omit<Options, "ignoreFiles" | "ignoreUnread"> & {
+export type ProgramOptions = Omit<
+  Options,
+  "ignoreFiles" | "ignoreUnread" | "ignoreCatch"
+> & {
   outputDir: string;
   threshold: number;
   "ignore-files"?: Options["ignoreFiles"];
+  "ignore-catch"?: Options["ignoreCatch"];
   "ignore-unread"?: Options["ignoreUnread"];
 };
 
@@ -31,6 +35,7 @@ export default async function generateCoverageReport(
     strict: options.strict,
     debug: options.debug,
     ignoreFiles: options["ignore-files"],
+    ignoreCatch: options["ignore-catch"],
     ignoreUnread: options["ignore-unread"],
     cache: options.cache
   });
