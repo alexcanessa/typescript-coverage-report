@@ -10,15 +10,9 @@ import rimraf from "rimraf";
 
 const asyncNcp = promisify(ncp);
 
-export type ProgramOptions = Omit<
-  Options,
-  "ignoreFiles" | "ignoreUnread" | "ignoreCatch"
-> & {
+export type ProgramOptions = Options & {
   outputDir: string;
   threshold: number;
-  "ignore-files"?: Options["ignoreFiles"];
-  "ignore-catch"?: Options["ignoreCatch"];
-  "ignore-unread"?: Options["ignoreUnread"];
 };
 
 export default async function generateCoverageReport(
@@ -34,9 +28,9 @@ export default async function generateCoverageReport(
   const data = await getCoverage({
     strict: options.strict,
     debug: options.debug,
-    ignoreFiles: options["ignore-files"],
-    ignoreCatch: options["ignore-catch"],
-    ignoreUnread: options["ignore-unread"],
+    ignoreFiles: options.ignoreFiles,
+    ignoreCatch: options.ignoreCatch,
+    ignoreUnread: options.ignoreUnread,
     cache: options.cache
   });
 

@@ -1,8 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`getOptions function returns a list of options with default values 1`] = `
-Object {
-  "outputDir": "coverage-type",
-  "strict": false,
-}
-`;

@@ -2,7 +2,6 @@
 
 import { program } from "commander";
 import generateCoverageReport from "../lib";
-import getOptions from "../lib/getOptions";
 import path from "path";
 
 const {
@@ -27,14 +26,14 @@ const argvWithVersion = (argvs: string[]): string[] => {
 };
 
 const {
+  outputDir = "coverage-ts",
   atLeast = 80,
   strict = false,
   debug = false,
   cache = false,
   ignoreFiles = false,
   ignoreCatch = false,
-  ignoreUnread = false,
-  outputDir = "coverage-ts"
+  ignoreUnread = false
 } = typeCoverage;
 
 program
@@ -75,7 +74,17 @@ program
   )
   .parse(argvWithVersion(process.argv));
 
-const options = getOptions(program);
+const options = {
+  /* camelCase keys matching "long" flags in options above */
+  outputDir: program.outputDir,
+  threshold: program.threshold,
+  strict: program.strict,
+  debug: program.debug,
+  cache: program.cache,
+  ignoreFiles: program.ignoreFiles,
+  ignoreCatch: program.ignoreCatch,
+  ignoreUnread: program.ignoreUnread
+};
 
 generateCoverageReport(options)
   .then(({ percentage }) => {
