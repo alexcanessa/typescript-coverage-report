@@ -32,6 +32,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "dignite",
+      "name": "Daniel Edholm Ignat",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2315367?v=4",
+      "profile": "http://dignat.se",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
