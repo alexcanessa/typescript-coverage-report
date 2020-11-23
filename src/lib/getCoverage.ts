@@ -20,7 +20,7 @@ export type CoverageData = {
 };
 
 export type Options = Partial<
-  Pick<LintOptions, "strict" | "debug" | "ignoreFiles"> & {
+  Pick<LintOptions, "strict" | "debug" | "ignoreFiles" | "ignoreCatch"> & {
     cache: LintOptions["enableCache"];
     ignoreUnread: LintOptions["ignoreUnreadAnys"];
   }
@@ -31,6 +31,7 @@ const getCoverage = async (options?: Options): Promise<CoverageData> => {
     strict,
     debug,
     ignoreFiles,
+    ignoreCatch,
     cache: enableCache,
     ignoreUnread: ignoreUnreadAnys
   } = options || {};
@@ -39,6 +40,7 @@ const getCoverage = async (options?: Options): Promise<CoverageData> => {
     strict,
     debug,
     ignoreFiles,
+    ignoreCatch,
     enableCache,
     ignoreUnreadAnys,
     fileCounts: true
