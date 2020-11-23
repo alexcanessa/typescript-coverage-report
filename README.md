@@ -7,7 +7,7 @@
 [![Automated Release Notes by gren](https://img.shields.io/badge/%F0%9F%A4%96-release%20notes-00B2EE.svg)](https://github-tools.github.io/github-release-notes/)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Node command line tool for generating TypeScript coverage reports ✨
@@ -125,6 +125,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/tsaiDavid"><img src="https://avatars3.githubusercontent.com/u/12259854?v=4" width="100px;" alt=""/><br /><sub><b>David Tsai</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=tsaiDavid" title="Documentation">📖</a> <a href="https://github.com/alexcanessa/typescript-coverage-report/issues?q=author%3AtsaiDavid" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://wvvw.me"><img src="https://avatars2.githubusercontent.com/u/6525926?v=4" width="100px;" alt=""/><br /><sub><b>Alexis Tyler</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/issues?q=author%3AOmgImAlexis" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://effectivetypescript.com"><img src="https://avatars1.githubusercontent.com/u/98301?v=4" width="100px;" alt=""/><br /><sub><b>Dan Vanderkam</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=danvk" title="Code">💻</a></td>
+    <td align="center"><a href="http://dignat.se"><img src="https://avatars2.githubusercontent.com/u/2315367?v=4" width="100px;" alt=""/><br /><sub><b>Daniel Edholm Ignat</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=dignite" title="Code">💻</a></td>
   </tr>
 </table>
 
