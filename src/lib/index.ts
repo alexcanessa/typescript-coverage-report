@@ -21,10 +21,6 @@ export default async function generateCoverageReport(
   // NOTE: Cleanup the folder
   const dirPath = path.join(process.cwd(), options.outputDir);
 
-  if (fs.existsSync(dirPath)) {
-    rimraf.sync(dirPath);
-  }
-
   const data = await getCoverage({
     strict: options.strict,
     debug: options.debug,
@@ -36,6 +32,10 @@ export default async function generateCoverageReport(
 
   console.log(generateText(data, options.threshold));
 
+  if (fs.existsSync(dirPath)) {
+    rimraf.sync(dirPath);
+  }
+  
   await generateHTML(data, options);
   await asyncNcp(
     path.join(__dirname, "../../assets"),
