@@ -59,6 +59,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "sanjaypojo",
+      "name": "Sanjay Guruprasad",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4957294?v=4",
+      "profile": "http://sanjaypojo.com",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
