@@ -68,6 +68,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "luislhl",
+      "name": "Luis Helder",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5041650?v=4",
+      "profile": "https://stackexchange.com/users/4249831/luislhl?tab=accounts",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
