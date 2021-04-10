@@ -35,7 +35,7 @@ export default async function generateCoverageReport(
   if (fs.existsSync(dirPath)) {
     rimraf.sync(dirPath);
   }
-  
+
   await generateHTML(data, options);
   await asyncNcp(
     path.join(__dirname, "../../assets"),
