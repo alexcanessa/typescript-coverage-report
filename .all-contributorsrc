@@ -77,6 +77,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "tomardern",
+      "name": "Tom Ardern",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1135454?v=4",
+      "profile": "https://github.com/tomardern",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
