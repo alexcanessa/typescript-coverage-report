@@ -31,6 +31,7 @@ const {
   strict = false,
   debug = false,
   cache = false,
+  project = ".",
   ignoreFiles = false,
   ignoreCatch = false,
   ignoreUnread = false
@@ -58,6 +59,11 @@ program
     cache
   )
   .option(
+    "-p, --project [string]",
+    'file path to tsconfig file, eg: --project "./app/tsconfig.app.json"',
+    project
+  )
+  .option(
     "-i, --ignore-files [string[]]",
     'ignore specified files, eg: --ignore-files "demo1/*.ts" --ignore-files "demo2/foo.ts"',
     ignoreFiles
@@ -78,6 +84,7 @@ const options = {
   /* camelCase keys matching "long" flags in options above */
   outputDir: program.outputDir,
   threshold: program.threshold,
+  tsProjectFile: program.project,
   strict: program.strict,
   debug: program.debug,
   cache: program.cache,
