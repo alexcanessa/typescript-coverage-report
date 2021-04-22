@@ -2,6 +2,10 @@ import typeCoverageCore from "type-coverage-core";
 import getCoverage from "../getCoverage";
 
 describe("getCoverage function", () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("returns calculated data from type-coverage-core", async (done) => {
     const data = await getCoverage();
 
@@ -10,7 +14,7 @@ describe("getCoverage function", () => {
     done();
   });
 
-  it("tsProjectFile is passed into lint function, if provided", async (done) => {
+  it("accepts a tsProjectFile option", async (done) => {
     typeCoverageCore.lint = jest.fn().mockImplementation(typeCoverageCore.lint);
 
     const data = await getCoverage({
@@ -18,33 +22,18 @@ describe("getCoverage function", () => {
     });
 
     expect(data).toMatchSnapshot();
-    expect(typeCoverageCore.lint).toHaveBeenCalledWith("./app/tsconfig.json", {
-      debug: undefined,
-      enableCache: undefined,
-      fileCounts: true,
-      ignoreCatch: undefined,
-      ignoreFiles: undefined,
-      ignoreUnreadAnys: undefined,
-      strict: undefined
-    });
+    // @ts-expect-error
+    expect(typeCoverageCore.lint.mock.calls).toMatchSnapshot();
     done();
   });
 
-  it("default project root is passed into lint function", async (done) => {
+  it("defaults to root project when tsProjectFile is not passed", async (done) => {
     typeCoverageCore.lint = jest.fn().mockImplementation(typeCoverageCore.lint);
 
-    const data = await getCoverage();
+    await getCoverage();
 
-    expect(data).toMatchSnapshot();
-    expect(typeCoverageCore.lint).toHaveBeenCalledWith(".", {
-      debug: undefined,
-      enableCache: undefined,
-      fileCounts: true,
-      ignoreCatch: undefined,
-      ignoreFiles: undefined,
-      ignoreUnreadAnys: undefined,
-      strict: undefined
-    });
+    // @ts-expect-error
+    expect(typeCoverageCore.lint.mock.calls).toMatchSnapshot();
     done();
   });
 });
