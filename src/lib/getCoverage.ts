@@ -31,7 +31,7 @@ export type Options = Partial<
 
 const getCoverage = async (options?: Options): Promise<CoverageData> => {
   const {
-    tsProjectFile,
+    tsProjectFile = ".",
     strict,
     debug,
     ignoreFiles,
@@ -40,9 +40,8 @@ const getCoverage = async (options?: Options): Promise<CoverageData> => {
     ignoreUnread: ignoreUnreadAnys
   } = options || {};
 
-  const projectPath = tsProjectFile || ".";
   const { anys, fileCounts, totalCount, correctCount } = await lint(
-    projectPath,
+    tsProjectFile,
     {
       strict,
       debug,
