@@ -20,12 +20,10 @@ export type CoverageData = {
 };
 
 export type Options = Partial<
-  Pick<
-    LintOptions,
-    "strict" | "debug" | "ignoreFiles" | "ignoreCatch" | "tsProjectFile"
-  > & {
+  Pick<LintOptions, "strict" | "debug" | "ignoreFiles" | "ignoreCatch"> & {
     cache: LintOptions["enableCache"];
     ignoreUnread: LintOptions["ignoreUnreadAnys"];
+    tsProjectFile: string;
   }
 >;
 
