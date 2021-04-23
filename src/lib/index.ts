@@ -22,6 +22,7 @@ export default async function generateCoverageReport(
   const dirPath = path.join(process.cwd(), options.outputDir);
 
   const data = await getCoverage({
+    tsProjectFile: options.tsProjectFile,
     strict: options.strict,
     debug: options.debug,
     ignoreFiles: options.ignoreFiles,

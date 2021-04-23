@@ -28,6 +28,7 @@
     "type-coverage": "node ./dist/bin/typescript-coverage-report",
     "docs": "yarn type-coverage --outputDir docs",
     "prepublish": "yarn lint && yarn build",
+    "test": "jest",
     "release": "gren release"
   },
   "devDependencies": {

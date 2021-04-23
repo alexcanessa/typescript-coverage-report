@@ -1,5 +1,55 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`getCoverage function accepts a tsProjectFile option 1`] = `
+Object {
+  "anys": Array [],
+  "covered": 100,
+  "fileCounts": Map {
+    "index.html" => Object {
+      "correctCount": 100,
+      "totalCount": 100,
+    },
+  },
+  "percentage": 100,
+  "total": 100,
+  "uncovered": 0,
+}
+`;
+
+exports[`getCoverage function accepts a tsProjectFile option 2`] = `
+Array [
+  Array [
+    "./app/tsconfig.json",
+    Object {
+      "debug": undefined,
+      "enableCache": undefined,
+      "fileCounts": true,
+      "ignoreCatch": undefined,
+      "ignoreFiles": undefined,
+      "ignoreUnreadAnys": undefined,
+      "strict": undefined,
+    },
+  ],
+]
+`;
+
+exports[`getCoverage function defaults to root project when tsProjectFile is not passed 1`] = `
+Array [
+  Array [
+    ".",
+    Object {
+      "debug": undefined,
+      "enableCache": undefined,
+      "fileCounts": true,
+      "ignoreCatch": undefined,
+      "ignoreFiles": undefined,
+      "ignoreUnreadAnys": undefined,
+      "strict": undefined,
+    },
+  ],
+]
+`;
+
 exports[`getCoverage function returns calculated data from type-coverage-core 1`] = `
 Object {
   "anys": Array [],
