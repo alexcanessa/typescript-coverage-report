@@ -1,19 +1,35 @@
 #!/usr/bin/env node
 
 import { program } from "commander";
-import generateCoverageReport from "../lib";
+import generateCoverageReport, { ProgramOptions } from "../lib";
 import path from "path";
+import { IPackageJson } from "package-json-type";
+
+type TypeCoverageConfig = {
+  outputDir?: string;
+  atLeast?: number;
+  strict?: boolean;
+  debug?: boolean;
+  cache?: boolean;
+  project?: string;
+  ignoreFiles?: boolean;
+  ignoreCatch?: boolean;
+  ignoreUnread?: boolean;
+};
 
 const {
   version,
   description
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-} = require("../../package.json");
+}: // eslint-disable-next-line @typescript-eslint/no-var-requires
+IPackageJson = require("../../package.json");
 
 const {
   typeCoverage = {}
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-} = require(path.join(process.cwd(), "/package.json"));
+}: // eslint-disable-next-line @typescript-eslint/no-var-requires
+IPackageJson & { typeCoverage?: TypeCoverageConfig } = require(path.join(
+  process.cwd(),
+  "/package.json"
+));
 
 const argvWithVersion = (argvs: string[]): string[] => {
   const vPos = argvs.indexOf("-v");
@@ -80,7 +96,7 @@ program
   )
   .parse(argvWithVersion(process.argv));
 
-const options = {
+const options: ProgramOptions = {
   /* camelCase keys matching "long" flags in options above */
   outputDir: program.outputDir,
   threshold: program.threshold,

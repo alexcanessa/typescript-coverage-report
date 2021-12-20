@@ -56,6 +56,7 @@
     "husky": "^4.2.3",
     "jest": "^25.1.0",
     "lint-staged": "^10.0.8",
+    "package-json-type": "^1.0.3",
     "prettier": "^2.0.2",
     "typescript": "4.1.3"
   },
@@ -77,6 +78,6 @@
     ]
   },
   "typeCoverage": {
-    "atLeast": 100
+    "atLeast": 90
   }
 }
