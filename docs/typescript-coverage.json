@@ -1,0 +1,86 @@
+{
+  "fileCounts": {},
+  "anys": [
+    {
+      "file": "src/bin/typescript-coverage-report.ts",
+      "line": 100,
+      "character": 21,
+      "text": "outputDir",
+      "kind": 1
+    },
+    {
+      "file": "src/bin/typescript-coverage-report.ts",
+      "line": 101,
+      "character": 21,
+      "text": "threshold",
+      "kind": 1
+    },
+    {
+      "file": "src/bin/typescript-coverage-report.ts",
+      "line": 102,
+      "character": 25,
+      "text": "project",
+      "kind": 1
+    },
+    {
+      "file": "src/bin/typescript-coverage-report.ts",
+      "line": 103,
+      "character": 18,
+      "text": "strict",
+      "kind": 1
+    },
+    {
+      "file": "src/bin/typescript-coverage-report.ts",
+      "line": 104,
+      "character": 17,
+      "text": "debug",
+      "kind": 1
+    },
+    {
+      "file": "src/bin/typescript-coverage-report.ts",
+      "line": 105,
+      "character": 17,
+      "text": "cache",
+      "kind": 1
+    },
+    {
+      "file": "src/bin/typescript-coverage-report.ts",
+      "line": 106,
+      "character": 23,
+      "text": "ignoreFiles",
+      "kind": 1
+    },
+    {
+      "file": "src/bin/typescript-coverage-report.ts",
+      "line": 107,
+      "character": 23,
+      "text": "ignoreCatch",
+      "kind": 1
+    },
+    {
+      "file": "src/bin/typescript-coverage-report.ts",
+      "line": 108,
+      "character": 24,
+      "text": "ignoreUnread",
+      "kind": 1
+    },
+    {
+      "file": "src/bin/typescript-coverage-report.ts",
+      "line": 125,
+      "character": 10,
+      "text": "error",
+      "kind": 1
+    },
+    {
+      "file": "src/bin/typescript-coverage-report.ts",
+      "line": 126,
+      "character": 18,
+      "text": "error",
+      "kind": 1
+    }
+  ],
+  "percentage": 98.88438133874239,
+  "total": 986,
+  "covered": 975,
+  "uncovered": 11
+}
