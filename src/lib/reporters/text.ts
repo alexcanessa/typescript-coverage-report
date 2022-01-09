@@ -1,11 +1,11 @@
-import Table from "terminal-table";
+import Table, { Cell } from "cli-table3";
 import { CoverageData } from "../getCoverage";
 import chalk from "chalk";
 
 const coverageTable = new Table({
-  leftPadding: 1,
-  rightPadding: 1,
-  borderStyle: 2
+  chars: { mid: "", "left-mid": "", "mid-mid": "", "right-mid": "" },
+  colAligns: ["left", "right", "right", "right", "right"],
+  style: { "padding-left": 1, "padding-right": 1 }
 });
 
 const calculatePercantage = (correct: number, total: number): number => {
@@ -27,7 +27,6 @@ export const generate = (
   { fileCounts, percentage, total, covered, uncovered }: CoverageData,
   threshold: number
 ): string => {
-  let row = 1;
   const headers = [
     "filenames" + chalk.gray(` (${fileCounts.size})`),
     "percent" + chalk.gray(` (${percentage.toFixed(2)}%)`),
@@ -41,13 +40,6 @@ export const generate = (
     headers.map(() => chalk.gray("---"))
   );
 
-  coverageTable.attrRange(
-    { column: [1, 5] },
-    {
-      align: "right"
-    }
-  );
-
   fileCounts.forEach(
     (
       {
@@ -56,25 +48,26 @@ export const generate = (
       }: { totalCount: number; correctCount: number },
       filename: string
     ) => {
-      row++;
-
-      coverageTable.push([
-        filename,
-        calculatePercantageWithString(correctCount, totalCount),
-        totalCount,
-        correctCount,
-        totalCount - correctCount
-      ]);
-
-      coverageTable.attrRange(
-        { row: [row] },
-        {
-          color:
-            Math.floor(calculatePercantage(correctCount, totalCount)) >=
-            threshold
-              ? "green"
-              : "red"
+      const colorCell = (cell: Cell): Cell => {
+        const color =
+          Math.floor(calculatePercantage(correctCount, totalCount)) >= threshold
+            ? chalk.green
+            : chalk.red;
+        if (typeof cell === "object" && "content" in cell) {
+          return { ...cell, content: color(cell.content) };
         }
+
+        return color(cell);
+      };
+
+      coverageTable.push(
+        [
+          filename,
+          calculatePercantageWithString(correctCount, totalCount),
+          totalCount,
+          correctCount,
+          totalCount - correctCount
+        ].map((val) => colorCell(val))
       );
     }
   );
