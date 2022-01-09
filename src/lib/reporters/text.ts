@@ -1,6 +1,6 @@
 import Table from "terminal-table";
 import { CoverageData } from "../getCoverage";
-import "colors";
+import chalk from "chalk";
 
 const coverageTable = new Table({
   leftPadding: 1,
@@ -29,16 +29,16 @@ export const generate = (
 ): string => {
   let row = 1;
   const headers = [
-    "filenames" + ` (${fileCounts.size})`.gray,
-    "percent" + ` (${percentage.toFixed(2)}%)`.gray,
-    "total" + ` (${total})`.gray,
-    "covered" + ` (${covered})`.gray,
-    "uncovered" + ` (${uncovered})`.gray
+    "filenames" + chalk.gray(` (${fileCounts.size})`),
+    "percent" + chalk.gray(` (${percentage.toFixed(2)}%)`),
+    "total" + chalk.gray(` (${total})`),
+    "covered" + chalk.gray(` (${covered})`),
+    "uncovered" + chalk.gray(` (${uncovered})`)
   ];
 
   coverageTable.push(
     headers,
-    headers.map(() => "---".gray)
+    headers.map(() => chalk.gray("---"))
   );
 
   coverageTable.attrRange(
