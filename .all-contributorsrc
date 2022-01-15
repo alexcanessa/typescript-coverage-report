@@ -114,6 +114,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "adicuco",
+      "name": "Adi Cucolaș",
+      "avatar_url": "https://avatars.githubusercontent.com/u/16133586?v=4",
+      "profile": "https://www.linkedin.com/in/adicuco/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

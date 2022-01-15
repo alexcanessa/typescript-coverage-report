@@ -7,7 +7,7 @@
 [![Automated Release Notes by gren](https://img.shields.io/badge/%F0%9F%A4%96-release%20notes-00B2EE.svg)](https://github-tools.github.io/github-release-notes/)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-12-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Node command line tool for generating TypeScript coverage reports ✨
@@ -141,6 +141,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/lroskoshin"><img src="https://avatars.githubusercontent.com/u/53659626?v=4?s=100" width="100px;" alt=""/><br /><sub><b>lroskoshin</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=lroskoshin" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/MhMadHamster"><img src="https://avatars.githubusercontent.com/u/4090965?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Max Burmagin</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=MhMadHamster" title="Code">💻</a></td>
     <td align="center"><a href="https://ceramichacker.com"><img src="https://avatars.githubusercontent.com/u/38059171?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Alexander Skvortsov</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=askvortsov1" title="Code">💻</a></td>
+    <td align="center"><a href="https://www.linkedin.com/in/adicuco/"><img src="https://avatars.githubusercontent.com/u/16133586?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Adi Cucolaș</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=adicuco" title="Code">💻</a></td>
   </tr>
 </table>
 
