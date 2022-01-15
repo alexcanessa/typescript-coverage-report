@@ -105,6 +105,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "askvortsov1",
+      "name": "Alexander Skvortsov",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38059171?v=4",
+      "profile": "https://ceramichacker.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
