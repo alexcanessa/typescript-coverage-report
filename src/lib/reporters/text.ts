@@ -36,6 +36,7 @@ export const generate = (
   ];
 
   coverageTable.push(
+    // @ts-expect-error For some reason TS doesn't narrow to horizontal table.
     headers,
     headers.map(() => chalk.gray("---"))
   );
@@ -61,6 +62,7 @@ export const generate = (
       };
 
       coverageTable.push(
+        // @ts-expect-error For some reason TS doesn't narrow to horizontal table.
         [
           filename,
           calculatePercantageWithString(correctCount, totalCount),
