@@ -94,6 +94,10 @@ program
     "allow writes to variables with implicit any types",
     ignoreUnread
   )
+  .option(
+    "-- [string[]]",
+    "only checks these files, useful for usage with tools like lint-staged"
+  )
   .parse(argvWithVersion(process.argv));
 
 const options: ProgramOptions = {
@@ -106,7 +110,8 @@ const options: ProgramOptions = {
   cache: program.cache,
   ignoreFiles: program.ignoreFiles,
   ignoreCatch: program.ignoreCatch,
-  ignoreUnread: program.ignoreUnread
+  ignoreUnread: program.ignoreUnread,
+  files: program.args.length > 0 ? program.args : undefined
 };
 
 generateCoverageReport(options)
