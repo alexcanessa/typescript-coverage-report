@@ -7,7 +7,7 @@
 [![Automated Release Notes by gren](https://img.shields.io/badge/%F0%9F%A4%96-release%20notes-00B2EE.svg)](https://github-tools.github.io/github-release-notes/)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-14-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Node command line tool for generating TypeScript coverage reports ✨
@@ -126,23 +126,26 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="https://github.com/tsaiDavid"><img src="https://avatars3.githubusercontent.com/u/12259854?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David Tsai</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=tsaiDavid" title="Documentation">📖</a> <a href="https://github.com/alexcanessa/typescript-coverage-report/issues?q=author%3AtsaiDavid" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://wvvw.me"><img src="https://avatars2.githubusercontent.com/u/6525926?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Alexis Tyler</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/issues?q=author%3AOmgImAlexis" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://effectivetypescript.com"><img src="https://avatars1.githubusercontent.com/u/98301?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dan Vanderkam</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=danvk" title="Code">💻</a></td>
-    <td align="center"><a href="http://dignat.se"><img src="https://avatars2.githubusercontent.com/u/2315367?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Daniel Edholm Ignat</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=dignite" title="Code">💻</a></td>
-    <td align="center"><a href="https://kyle.kiwi"><img src="https://avatars0.githubusercontent.com/u/16009897?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kyℓe Hensel</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=k-yle" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/cabello"><img src="https://avatars.githubusercontent.com/u/60936?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Danilo Cabello</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=cabello" title="Code">💻</a></td>
-    <td align="center"><a href="http://sanjaypojo.com"><img src="https://avatars.githubusercontent.com/u/4957294?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Sanjay Guruprasad</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/issues?q=author%3Asanjaypojo" title="Bug reports">🐛</a></td>
-  </tr>
-  <tr>
-    <td align="center"><a href="https://stackexchange.com/users/4249831/luislhl?tab=accounts"><img src="https://avatars.githubusercontent.com/u/5041650?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Luis Helder</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/issues?q=author%3Aluislhl" title="Bug reports">🐛</a></td>
-    <td align="center"><a href="https://github.com/tomardern"><img src="https://avatars.githubusercontent.com/u/1135454?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Tom Ardern</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/issues?q=author%3Atomardern" title="Bug reports">🐛</a> <a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=tomardern" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/lroskoshin"><img src="https://avatars.githubusercontent.com/u/53659626?v=4?s=100" width="100px;" alt=""/><br /><sub><b>lroskoshin</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=lroskoshin" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/MhMadHamster"><img src="https://avatars.githubusercontent.com/u/4090965?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Max Burmagin</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=MhMadHamster" title="Code">💻</a></td>
-    <td align="center"><a href="https://ceramichacker.com"><img src="https://avatars.githubusercontent.com/u/38059171?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Alexander Skvortsov</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=askvortsov1" title="Code">💻</a></td>
-    <td align="center"><a href="https://www.linkedin.com/in/adicuco/"><img src="https://avatars.githubusercontent.com/u/16133586?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Adi Cucolaș</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=adicuco" title="Code">💻</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center"><a href="https://github.com/tsaiDavid"><img src="https://avatars3.githubusercontent.com/u/12259854?v=4?s=100" width="100px;" alt="David Tsai"/><br /><sub><b>David Tsai</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=tsaiDavid" title="Documentation">📖</a> <a href="https://github.com/alexcanessa/typescript-coverage-report/issues?q=author%3AtsaiDavid" title="Bug reports">🐛</a></td>
+      <td align="center"><a href="https://wvvw.me"><img src="https://avatars2.githubusercontent.com/u/6525926?v=4?s=100" width="100px;" alt="Alexis Tyler"/><br /><sub><b>Alexis Tyler</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/issues?q=author%3AOmgImAlexis" title="Bug reports">🐛</a></td>
+      <td align="center"><a href="https://effectivetypescript.com"><img src="https://avatars1.githubusercontent.com/u/98301?v=4?s=100" width="100px;" alt="Dan Vanderkam"/><br /><sub><b>Dan Vanderkam</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=danvk" title="Code">💻</a></td>
+      <td align="center"><a href="http://dignat.se"><img src="https://avatars2.githubusercontent.com/u/2315367?v=4?s=100" width="100px;" alt="Daniel Edholm Ignat"/><br /><sub><b>Daniel Edholm Ignat</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=dignite" title="Code">💻</a></td>
+      <td align="center"><a href="https://kyle.kiwi"><img src="https://avatars0.githubusercontent.com/u/16009897?v=4?s=100" width="100px;" alt="Kyℓe Hensel"/><br /><sub><b>Kyℓe Hensel</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=k-yle" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/cabello"><img src="https://avatars.githubusercontent.com/u/60936?v=4?s=100" width="100px;" alt="Danilo Cabello"/><br /><sub><b>Danilo Cabello</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=cabello" title="Code">💻</a></td>
+      <td align="center"><a href="http://sanjaypojo.com"><img src="https://avatars.githubusercontent.com/u/4957294?v=4?s=100" width="100px;" alt="Sanjay Guruprasad"/><br /><sub><b>Sanjay Guruprasad</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/issues?q=author%3Asanjaypojo" title="Bug reports">🐛</a></td>
+    </tr>
+    <tr>
+      <td align="center"><a href="https://stackexchange.com/users/4249831/luislhl?tab=accounts"><img src="https://avatars.githubusercontent.com/u/5041650?v=4?s=100" width="100px;" alt="Luis Helder"/><br /><sub><b>Luis Helder</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/issues?q=author%3Aluislhl" title="Bug reports">🐛</a></td>
+      <td align="center"><a href="https://github.com/tomardern"><img src="https://avatars.githubusercontent.com/u/1135454?v=4?s=100" width="100px;" alt="Tom Ardern"/><br /><sub><b>Tom Ardern</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/issues?q=author%3Atomardern" title="Bug reports">🐛</a> <a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=tomardern" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/lroskoshin"><img src="https://avatars.githubusercontent.com/u/53659626?v=4?s=100" width="100px;" alt="lroskoshin"/><br /><sub><b>lroskoshin</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=lroskoshin" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/MhMadHamster"><img src="https://avatars.githubusercontent.com/u/4090965?v=4?s=100" width="100px;" alt="Max Burmagin"/><br /><sub><b>Max Burmagin</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=MhMadHamster" title="Code">💻</a></td>
+      <td align="center"><a href="https://ceramichacker.com"><img src="https://avatars.githubusercontent.com/u/38059171?v=4?s=100" width="100px;" alt="Alexander Skvortsov"/><br /><sub><b>Alexander Skvortsov</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=askvortsov1" title="Code">💻</a></td>
+      <td align="center"><a href="https://www.linkedin.com/in/adicuco/"><img src="https://avatars.githubusercontent.com/u/16133586?v=4?s=100" width="100px;" alt="Adi Cucolaș"/><br /><sub><b>Adi Cucolaș</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=adicuco" title="Code">💻</a></td>
+      <td align="center"><a href="https://github.com/StaRenn"><img src="https://avatars.githubusercontent.com/u/58230797?v=4?s=100" width="100px;" alt="Stanislav Golyshev"/><br /><sub><b>Stanislav Golyshev</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=StaRenn" title="Code">💻</a></td>
+    </tr>
+  </tbody>
 </table>
 
 <!-- markdownlint-restore -->
