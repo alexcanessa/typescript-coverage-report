@@ -123,6 +123,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "StaRenn",
+      "name": "Stanislav Golyshev",
+      "avatar_url": "https://avatars.githubusercontent.com/u/58230797?v=4",
+      "profile": "https://github.com/StaRenn",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -130,5 +139,6 @@
   "projectOwner": "alexcanessa",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "angular"
 }
