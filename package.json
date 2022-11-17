@@ -19,7 +19,7 @@
     "react-dom": "^16.13.1",
     "rimraf": "^3.0.2",
     "semantic-ui-react": "^0.88.2",
-    "type-coverage-core": "^2.17.2"
+    "type-coverage-core": "^2.23.0"
   },
   "scripts": {
     "build": "tsc",

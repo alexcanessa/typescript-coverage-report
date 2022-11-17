@@ -28,7 +28,8 @@ export default async function generateCoverageReport(
     ignoreFiles: options.ignoreFiles,
     ignoreCatch: options.ignoreCatch,
     ignoreUnread: options.ignoreUnread,
-    cache: options.cache
+    cache: options.cache,
+    files: options.files
   });
 
   console.log(generateText(data, options.threshold));
