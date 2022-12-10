@@ -42,7 +42,7 @@ const argvWithVersion = (argvs: string[]): string[] => {
 };
 
 const {
-  outputDir = "coverage-ts",
+  outputDir = "typescript-coverage",
   atLeast = 80,
   strict = false,
   debug = false,

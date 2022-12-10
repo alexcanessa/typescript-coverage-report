@@ -1,6 +1,6 @@
 #tests
 coverage
-coverage-ts
+typescript-coverage
 
 #linters
 .eslintrc.js

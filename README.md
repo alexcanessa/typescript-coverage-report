@@ -83,7 +83,7 @@ The CLI accepts a list of arguments:
 | Option                          | Description                                                                            | Default value |
 | ------------------------------- | -------------------------------------------------------------------------------------- | ------------- |
 | `-t, --threshold [number]`      | The minimum percentage of coverage required.                                           | 80            |
-| `-o, --outputDir [string]`      | The output directory where to generate the report.                                     | coverage-ts   |
+| `-o, --outputDir [string]`      | The output directory where to generate the report.                                     | typescript-coverage   |
 | `-s, --strict [boolean]`        | Run the check in strict mode.                                                          | false         |
 | `-d, --debug [boolean]`         | Show debug information.                                                                | false         |
 | `-c, --cache [boolean]`         | Save and reuse type check result from cache.                                           | false         |
