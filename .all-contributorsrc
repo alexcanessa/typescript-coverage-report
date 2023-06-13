@@ -132,6 +132,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "roikoren755",
+      "name": "roikoren755",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26850796?v=4",
+      "profile": "https://github.com/roikoren755",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -140,5 +149,6 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true,
-  "commitConvention": "angular"
+  "commitConvention": "angular",
+  "commitType": "docs"
 }
