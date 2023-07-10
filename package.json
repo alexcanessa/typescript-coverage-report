@@ -15,8 +15,6 @@
     "cli-table3": "^0.6.1",
     "commander": "^5.0.0",
     "ncp": "^2.0.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
     "rimraf": "^3.0.2",
     "semantic-ui-react": "^0.88.2",
     "type-coverage-core": "^2.23.0"
@@ -61,7 +59,9 @@
     "typescript": "5.0.4"
   },
   "peerDependencies": {
-    "typescript": "2 || 3 || 4 || 5"
+    "typescript": "2 || 3 || 4 || 5",
+    "react": ">=16.13.1",
+    "react-dom": ">=16.13.1"
   },
   "husky": {
     "hooks": {
