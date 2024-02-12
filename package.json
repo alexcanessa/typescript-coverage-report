@@ -1,6 +1,6 @@
 {
   "name": "typescript-coverage-report",
-  "version": "0.8.0",
+  "version": "1.0.0",
   "description": "Node command tool to generate TypeScript coverage report.",
   "main": "dist/lib/index.js",
   "bin": {
