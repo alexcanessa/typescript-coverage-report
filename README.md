@@ -7,7 +7,7 @@
 [![Automated Release Notes by gren](https://img.shields.io/badge/%F0%9F%A4%96-release%20notes-00B2EE.svg)](https://github-tools.github.io/github-release-notes/)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-16-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-17-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Node command line tool for generating TypeScript coverage reports ✨
@@ -148,6 +148,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/roikoren755"><img src="https://avatars.githubusercontent.com/u/26850796?v=4?s=100" width="100px;" alt="roikoren755"/><br /><sub><b>roikoren755</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=roikoren755" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jinphic"><img src="https://avatars.githubusercontent.com/u/78671853?v=4?s=100" width="100px;" alt="jinphic"/><br /><sub><b>jinphic</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=jinphic" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://brandonbarker.me"><img src="https://avatars.githubusercontent.com/u/4194371?v=4?s=100" width="100px;" alt="Brandon Barker"/><br /><sub><b>Brandon Barker</b></sub></a><br /><a href="https://github.com/alexcanessa/typescript-coverage-report/commits?author=ProjectBarks" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
