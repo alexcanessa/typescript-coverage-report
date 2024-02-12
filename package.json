@@ -64,7 +64,9 @@
     "typescript": "5.0.4"
   },
   "peerDependencies": {
-    "typescript": "2 || 3 || 4 || 5"
+    "typescript": "2 || 3 || 4 || 5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "husky": {
     "hooks": {
