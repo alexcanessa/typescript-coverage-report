@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import React from "react";
 import DetailPage from "../";
 import { render } from "@testing-library/react";

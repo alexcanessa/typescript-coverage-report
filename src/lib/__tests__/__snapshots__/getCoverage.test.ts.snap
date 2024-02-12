@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`getCoverage function accepts a tsProjectFile option 1`] = `
-Object {
-  "anys": Array [],
+{
+  "anys": [],
   "covered": 100,
   "fileCounts": Map {
-    "index.html" => Object {
+    "index.html" => {
       "correctCount": 100,
       "totalCount": 100,
     },
@@ -17,10 +17,10 @@ Object {
 `;
 
 exports[`getCoverage function accepts a tsProjectFile option 2`] = `
-Array [
-  Array [
+[
+  [
     "./app/tsconfig.json",
-    Object {
+    {
       "debug": undefined,
       "enableCache": undefined,
       "fileCounts": true,
@@ -35,10 +35,10 @@ Array [
 `;
 
 exports[`getCoverage function defaults to root project when tsProjectFile is not passed 1`] = `
-Array [
-  Array [
+[
+  [
     ".",
-    Object {
+    {
       "debug": undefined,
       "enableCache": undefined,
       "fileCounts": true,
@@ -53,11 +53,11 @@ Array [
 `;
 
 exports[`getCoverage function returns calculated data from type-coverage-core 1`] = `
-Object {
-  "anys": Array [],
+{
+  "anys": [],
   "covered": 100,
   "fileCounts": Map {
-    "index.html" => Object {
+    "index.html" => {
       "correctCount": 100,
       "totalCount": 100,
     },

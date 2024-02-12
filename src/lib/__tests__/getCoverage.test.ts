@@ -6,15 +6,13 @@ describe("getCoverage function", () => {
     jest.clearAllMocks();
   });
 
-  it("returns calculated data from type-coverage-core", async (done) => {
+  it("returns calculated data from type-coverage-core", async () => {
     const data = await getCoverage();
 
     expect(data).toMatchSnapshot();
-
-    done();
   });
 
-  it("accepts a tsProjectFile option", async (done) => {
+  it("accepts a tsProjectFile option", async () => {
     typeCoverageCore.lint = jest.fn().mockImplementation(typeCoverageCore.lint);
 
     const data = await getCoverage({
@@ -24,16 +22,14 @@ describe("getCoverage function", () => {
     expect(data).toMatchSnapshot();
     // @ts-expect-error
     expect(typeCoverageCore.lint.mock.calls).toMatchSnapshot();
-    done();
   });
 
-  it("defaults to root project when tsProjectFile is not passed", async (done) => {
+  it("defaults to root project when tsProjectFile is not passed", async () => {
     typeCoverageCore.lint = jest.fn().mockImplementation(typeCoverageCore.lint);
 
     await getCoverage();
 
     // @ts-expect-error
     expect(typeCoverageCore.lint.mock.calls).toMatchSnapshot();
-    done();
   });
 });

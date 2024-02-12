@@ -39,7 +39,10 @@ describe("generate function", () => {
       expectedFilePath,
       expect.any(String)
     );
-    expect(JSON.parse(fsMocked.writeFile.mock.calls[0][1])).toMatchObject({
+
+    expect(
+      JSON.parse(fsMocked.writeFile.mock.calls[0][1].toString())
+    ).toMatchObject({
       fileCounts: {
         "file1.ts": {
           correctCount: expect.any(Number),

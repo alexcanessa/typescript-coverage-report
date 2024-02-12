@@ -11,5 +11,5 @@
     "inlineSourceMap": true,
     "jsx": "react"
   },
-  "exclude": ["**/__tests__/*.test.ts?x"]
+  "exclude": ["**/__tests__/*.test.ts?x", "dist", "node_modules"]
 }
