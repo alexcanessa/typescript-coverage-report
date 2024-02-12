@@ -38,7 +38,7 @@
     "@testing-library/react": "^10.0.1",
     "@types/jest": "^29.2.5",
     "@types/ncp": "^2.0.3",
-    "@types/node": "^13.9.2",
+    "@types/node": "^20.11.17",
     "@types/react": "^16.9.23",
     "@types/react-dom": "^16.9.5",
     "@types/testing-library__react": "^9.1.3",
