@@ -1,10 +1,10 @@
 import { CoverageData } from "../../../getCoverage";
 
-const globalHeaders = ["Percent", "Threshold", "Total", "Covered", "Uncovered"];
+const reportHeaders = ["Percent", "Threshold", "Total", "Covered", "Uncovered"];
 
 const headers = ["Filename", "Percent", "Total", "Covered", "Uncovered"];
 
-type Props = Omit<CoverageData, "anys"> & {
+type GenerateSummaryPageContext = Omit<CoverageData, "anys"> & {
   threshold: number;
 };
 
@@ -15,39 +15,39 @@ export const generateSummaryPage = ({
   covered,
   uncovered,
   threshold
-}: Props) => {
+}: GenerateSummaryPageContext) => {
   const isSummaryValid = percentage >= threshold;
 
   return `
-  <section style="margin-top: 3em;">
-  <h1>TypeScript coverage report</h1>
-  <h2>Summary</h2>
-  <table>
+  <div style="margin-top: 3em;" class="ui container">
+  <h1 class="ui header">TypeScript coverage report</h1>
+  <h2 class="ui header">Summary</h2>
+  <table class="ui table celled">
     <thead>
       <tr>
-        ${globalHeaders.map((header) => `<th>${header}</th>`).join("\n")}
+        ${reportHeaders.map((header) => `<th>${header}</th>`).join("\n")}
       </tr>
     </thead>
     <tbody>
       <tr class="${isSummaryValid ? "positive" : "negative"}">
-        <td>${percentage.toFixed(2) + "%"}</td>
-        <td>${threshold}%</td>
-        <td>${total}</td>
-        <td>${covered}</td>
-        <td>${uncovered}</td>
+        <td data-label="Percent">${percentage.toFixed(2) + "%"}</td>
+        <td data-label="Threshold">${threshold}%</td>
+        <td data-label="Total">${total}</td>
+        <td data-label="Covered">${covered}</td>
+        <td data-label="Uncovered">${uncovered}</td>
       </tr>
     </tbody>
   </table>
-  <h2>Files</h2>
-  <table style="margin-top: 2em;" class="sortable">
+  <h2 class="ui header">Files</h2>
+  <table style="margin-top: 2em" class="ui table celled sortable">
     <thead>
       <tr>
         ${headers.map((header) => `<th>${header}</th>`).join("\n")}
       </tr>
     </thead>
     <tbody>
-      ${Array.from(fileCounts).map(
-        ([filename, { correctCount, totalCount }]) => {
+      ${Array.from(fileCounts)
+        .map(([filename, { correctCount, totalCount }]) => {
           const percentage =
             totalCount === 0 ? 100 : (correctCount * 100) / totalCount;
           const percentageCoverage = percentage.toFixed(2) + "%";
@@ -62,10 +62,9 @@ export const generateSummaryPage = ({
           <td>${totalCount}</td>
           <td>${correctCount}</td>
           <td>${totalCount - correctCount}</td>
-        </tr>
-        `;
-        }
-      )}
+        </tr>`;
+        })
+        .join("\n")}
     </tbody>
   </table>
 </section>`;

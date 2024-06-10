@@ -1,12 +1,3 @@
-const headers = [
-  "Filename",
-  "Percent",
-  "Threshold",
-  "Total",
-  "Covered",
-  "Uncovered"
-];
-
 type Annotation = {
   file: string;
   line: number;
@@ -14,7 +5,7 @@ type Annotation = {
   text: string;
 };
 
-type Props = {
+type GenerateDetailsPageContext = {
   filename: string;
   sourceCode: string;
   totalCount: number;
@@ -30,19 +21,24 @@ export const generateDetailsPage = ({
   correctCount,
   annotations,
   threshold
-}: Props) => {
+}: GenerateDetailsPageContext) => {
   const percentage = totalCount === 0 ? 100 : (correctCount * 100) / totalCount;
   const percentageCoverage = percentage.toFixed(2) + "%";
   const isValid = percentage >= threshold;
 
-  return `<section style="margin-top: 3em;">
-  <h1>
+  return `<div style="margin-top: 3em;" class="ui container">
+  <h1 class="ui header">
     <a href="/index.html">TypeScript coverage report</a>
   </h1>
-  <table>
+  <table class="ui table celled">
     <thead>
       <tr>
-        ${headers.map((header) => `<th>${header}</th>`).join("\n")}
+        <th>Filename</th>
+        <th>Percent</th>
+        <th>Threshold</th>
+        <th>Total</th>
+        <th>Covered</th>
+        <th>Uncovered</th>
       </tr>
     </thead>
     <tbody>
@@ -58,10 +54,9 @@ export const generateDetailsPage = ({
   </table>
   <textarea
     id="editor"
-    value="${sourceCode}"
     readonly
     style="margin-top: 3em;"
-  />
+  >${sourceCode}</textarea>
   <pre id="annotations" style="display: none;">
     ${JSON.stringify(annotations)}
   </pre>
