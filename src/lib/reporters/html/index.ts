@@ -88,7 +88,7 @@ export const generate = async (
     },
     {
       assets: includeAssets([
-        "./assets/source-file.css",
+        "./assets/report.css",
         "https://cdn.jsdelivr.net/npm/sorttable@1.0.2/sorttable.min.js"
       ])
     }
@@ -126,8 +126,8 @@ export const generate = async (
           "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.js",
           "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/mode/javascript/javascript.min.js",
           "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.css",
-          path.join(assetsFolder, "source-file.js"),
-          path.join(assetsFolder, "source-file.css")
+          path.join(assetsFolder, "report.css"),
+          path.join(assetsFolder, "source-file.js")
         ])
       }
     );
