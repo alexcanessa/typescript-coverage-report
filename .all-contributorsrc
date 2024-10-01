@@ -159,6 +159,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "sybers",
+      "name": "Stanyslas Bres",
+      "avatar_url": "https://avatars.githubusercontent.com/u/15731884?v=4",
+      "profile": "https://stanyslasbres.fr",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
