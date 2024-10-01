@@ -1,11 +1,9 @@
-import React from "react";
-import react from "react-dom/server";
 import path from "path";
 import fs from "fs";
 import { promisify } from "util";
-import { CoverageData } from "../getCoverage";
-import SummaryPage from "../../components/SummaryPage";
-import DetailPage from "../../components/DetailPage";
+import { CoverageData } from "../../getCoverage";
+import { generateSummaryPage } from "./pages/summary";
+import { generateDetailsPage } from "./pages/details";
 
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
@@ -43,7 +41,7 @@ const includeAssets = (assets: readonly string[]): string =>
   assets.map(includeAsset).join("\n");
 
 const wrapHTMLContent = (
-  Component: React.ElementType,
+  renderFn: Function,
   props?: Record<string, any>,
   options:
     | {
@@ -52,9 +50,7 @@ const wrapHTMLContent = (
       }
     | undefined = {}
 ): string => {
-  const content = react.renderToStaticMarkup(
-    React.createElement(Component, props)
-  );
+  const content = renderFn(props);
 
   return `
   <!DOCTYPE html>
@@ -81,7 +77,7 @@ export const generate = async (
 ): Promise<void> => {
   // NOTE: Create index file
   const fileContent = wrapHTMLContent(
-    SummaryPage,
+    generateSummaryPage,
     {
       fileCounts: data.fileCounts,
       percentage: data.percentage,
@@ -92,7 +88,7 @@ export const generate = async (
     },
     {
       assets: includeAssets([
-        "./assets/source-file.css",
+        "./assets/report.css",
         "https://cdn.jsdelivr.net/npm/sorttable@1.0.2/sorttable.min.js"
       ])
     }
@@ -115,7 +111,7 @@ export const generate = async (
     const assetsFolder = path.relative(filename, "assets");
     const sourceCode = await readFile(filename, "utf-8");
     const detailContent = wrapHTMLContent(
-      DetailPage,
+      generateDetailsPage,
       {
         filename,
         sourceCode,
@@ -130,8 +126,8 @@ export const generate = async (
           "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.js",
           "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/mode/javascript/javascript.min.js",
           "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.css",
-          path.join(assetsFolder, "source-file.js"),
-          path.join(assetsFolder, "source-file.css")
+          path.join(assetsFolder, "report.css"),
+          path.join(assetsFolder, "source-file.js")
         ])
       }
     );
