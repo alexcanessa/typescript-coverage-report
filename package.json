@@ -38,6 +38,7 @@
     "@types/jest": "^29.2.5",
     "@types/ncp": "^2.0.3",
     "@types/node": "^20.11.17",
+    "@types/rimraf": "^3.0.2",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
     "babel-jest": "^25.1.0",
@@ -52,10 +53,10 @@
     "lint-staged": "^10.0.8",
     "package-json-type": "^1.0.3",
     "prettier": "^2.0.2",
-    "typescript": "5.0.4"
+    "typescript": "^6.0.0"
   },
   "peerDependencies": {
-    "typescript": "2 || 3 || 4 || 5"
+    "typescript": "2 || 3 || 4 || 5 || 6"
   },
   "husky": {
     "hooks": {

@@ -73,7 +73,7 @@ const wrapHTMLContent = (
 // NOTE: This generate function has side effect of creating the index.html
 export const generate = async (
   data: CoverageData,
-  options?: Options
+  options: Options
 ): Promise<void> => {
   // NOTE: Create index file
   const fileContent = wrapHTMLContent(
