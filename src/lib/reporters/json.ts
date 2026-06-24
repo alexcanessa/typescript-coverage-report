@@ -9,7 +9,7 @@ type Options = {
 
 export const generate = async (
   coverageData: CoverageData,
-  options?: Options
+  options: Options
 ): Promise<void> => {
   // Maps cannot be serialized in JSON.stringify
   const serializableFileCounts = Object.fromEntries(coverageData.fileCounts);

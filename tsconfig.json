@@ -1,16 +1,18 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
     "outDir": "dist",
     "declaration": true,
-    "moduleResolution": "node",
+    "module": "commonjs",
+    "target": "es2022",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "rootDir": "src",
-    "lib": ["ESNext", "DOM", "ES5", "ES6"],
+    "types": ["node"],
+    "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "inlineSourceMap": true,
     "jsx": "react"
   },
-  "exclude": ["**/__tests__/*.test.ts?x", "dist", "node_modules"]
+  "exclude": ["**/__tests__/**", "dist", "node_modules"]
 }

@@ -54,8 +54,8 @@ const {
 } = typeCoverage;
 
 program
-  .version(version)
-  .description(description)
+  .version(version ?? "")
+  .description(description ?? "")
   .option(
     "-o, --outputDir [string]",
     "the output directory where to generate the report.",

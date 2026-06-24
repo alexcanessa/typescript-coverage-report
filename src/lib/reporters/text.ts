@@ -53,7 +53,7 @@ export const generate = (
           Math.floor(calculatePercantage(correctCount, totalCount)) >= threshold
             ? chalk.green
             : chalk.red;
-        if (typeof cell === "object" && "content" in cell) {
+        if (cell !== null && typeof cell === "object" && "content" in cell) {
           return { ...cell, content: color(cell.content) };
         }
 
