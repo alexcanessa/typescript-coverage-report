@@ -23,6 +23,7 @@
     "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "type-coverage": "node ./dist/bin/typescript-coverage-report",
     "docs": "yarn type-coverage --outputDir docs",
+    "prepack": "yarn build",
     "prepublish": "yarn lint && yarn build",
     "test": "jest",
     "release": "gren release"
