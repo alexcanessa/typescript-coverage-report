@@ -102,39 +102,19 @@ $ typescript-coverage-report src/one.ts src/two.ts
 
 ## Migrating to 2.0
 
-### Node 22.12 or newer is required
+2.0 is mostly a repair release: 1.1.0 and 1.1.1 were broken on npm, and this is the first version in eighteen months that installs and runs correctly. If you are pinned to `^0.8.0` because of that, this is the upgrade that unpins you.
 
-`engines` now declares `>=22.12.0`. Node 20 reached end of life on 2026-04-30, so every previously supported release line was already unsupported upstream. This also let the package drop two dependencies in favour of Node built-ins.
+| Change                                  | Do you need to act?                             |
+| --------------------------------------- | ----------------------------------------------- |
+| Node 22.12 or newer required            | Only if you run Node 20 or older                |
+| `-V` no longer prints the version       | Only if you scripted `-V`                       |
+| Boolean flags take no value             | Only if you pass `--strict false` or similar    |
+| `--ignore-files` repeats now accumulate | Check your reports — more files are ignored now |
+| Invalid `--threshold` is an error       | Only if it was already silently broken          |
+| The report excludes its own output      | Your percentage may change, for the better      |
+| TypeScript 7 unsupported                | Stay on TypeScript 6 or older                   |
 
-### `-V` no longer prints the version
-
-Use `-v` or `--version`. Previously the CLI rewrote `-v` to `-V` before parsing, which also corrupted a legitimate `-v` appearing as an option value. `-V` was never documented.
-
-### Boolean flags no longer take a value
-
-`--strict`, `--debug`, `--cache`, `--ignore-catch` and `--ignore-unread` are now plain flags. Passing `--strict false` previously set the _string_ `"false"`, which is truthy, so it silently did the opposite of what it looked like. Omit the flag instead.
-
-### `--ignore-files` requires a value, and repeats now accumulate
-
-`-i` takes a glob and may be passed more than once, which is what the help text always claimed:
-
-```shell
-$ typescript-coverage-report -i "demo1/*.ts" -i "demo2/foo.ts"
-```
-
-Previously only the last occurrence took effect. If you were relying on that, your reports will now ignore more files than before. Passing `-i` with no value is now an error rather than silently reaching the type checker as a boolean.
-
-### An invalid `--threshold` is now an error
-
-`--threshold abc` used to parse as `NaN`, and `percentage < NaN` is `false`, so the run exited 0 however low the coverage was. It now fails with a usage error.
-
-### The report no longer includes its own output
-
-If your `tsconfig.json` has no `include`, previous runs' output was part of the type check and appeared in the table. It is now excluded, so your percentage may change — it was wrong before.
-
-### TypeScript 7 is not supported
-
-`peerDependencies` covers `2 || 3 || 4 || 5 || 6`. TypeScript 7 replaced the classic compiler API that `type-coverage-core` is built on, so it cannot work yet. CI runs a canary against it and this note will change when upstream catches up.
+See **[MIGRATING.md](MIGRATING.md)** for the detail on each, including two that are worth checking even though they look cosmetic: `--strict false` used to turn strict mode _on_, and an invalid `--threshold` used to exit `0` however low the coverage was.
 
 ## Maintainers
 

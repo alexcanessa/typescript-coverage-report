@@ -77,6 +77,14 @@ Because we squash-merge, **the pull request title becomes the commit on
 whatever you like; the pre-commit hook will nudge you, but it will not block
 your pull request.
 
+### A gotcha worth knowing
+
+The repository squash-merges with the **pull request body** as the commit
+message. That means a `BREAKING CHANGE:` footer has to be in the pull request
+body, not only in your local commit message — otherwise the release tooling
+records the bump but not the explanation, and the changelog says nothing
+useful.
+
 ## Releases
 
 Do **not** bump the version in `package.json`, and do **not** publish by hand.
