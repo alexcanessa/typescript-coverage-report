@@ -1,0 +1,57 @@
+name: PR title
+
+# The repository squash-merges, so the squash subject becomes the only commit
+# on main. Validating the PR title therefore validates exactly the string that
+# lands in history and that release-please will later parse.
+#
+# Individual commits are deliberately not linted here. A drive-by contributor's
+# third "wip" commit is erased by the squash, so blocking on it is friction for
+# no benefit. The local commit-msg hook still nudges.
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize, ready_for_review]
+
+permissions:
+  pull-requests: read
+
+concurrency:
+  group: pr-title-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: PR title
+    runs-on: ubuntu-latest
+    steps:
+      # Reads only github.event.pull_request.title from the payload, so a
+      # read-only fork token is enough and no untrusted code is checked out.
+      - uses: amannn/action-semantic-pull-request@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            perf
+            refactor
+            docs
+            test
+            build
+            ci
+            chore
+            style
+            revert
+          requireScope: false
+          # Guards only against an empty or space-led subject. A leading emoji
+          # is already rejected by the type check above, because "🎉 feat: x"
+          # parses its type as "🎉 feat", which is not in the list. Matching
+          # emoji here would need the u flag, which the action does not apply;
+          # without it \p{...} degrades to a literal character class and
+          # rejects almost every subject.
+          subjectPattern: '^(?!\s).{3,}$'
+          subjectPatternError: >
+            The subject "{subject}" is invalid. Use `type(optional scope): subject`,
+            for example `feat: add a JSON reporter` or `fix(html): handle Windows
+            paths`. Emojis are very welcome, but they go after the colon.
+          validateSingleCommit: false
