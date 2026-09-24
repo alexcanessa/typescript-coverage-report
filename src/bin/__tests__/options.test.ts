@@ -3,6 +3,7 @@ import {
   collect,
   createProgram,
   normalizeIgnoreFiles,
+  parseReporters,
   parseThreshold,
   resolveOptions
 } from "../options";
@@ -163,5 +164,108 @@ describe("resolveOptions", () => {
 
   it("respects `strict: false` in config over the default", () => {
     expect(resolveOptions({}, { strict: false }).strict).toBe(false);
+  });
+});
+
+describe("parseReporters", () => {
+  it("parses a comma-separated list", () => {
+    expect(parseReporters("lcov,cobertura")).toEqual(["lcov", "cobertura"]);
+  });
+
+  it("tolerates whitespace", () => {
+    expect(parseReporters(" json , lcov ")).toEqual(["json", "lcov"]);
+  });
+
+  it("deduplicates", () => {
+    expect(parseReporters("json,json")).toEqual(["json"]);
+  });
+
+  it("rejects an unknown reporter rather than silently skipping it", () => {
+    // A CI job asking for a reporter and getting no artefact would look like
+    // the tool produced nothing, which is the failure this option prevents.
+    expect(() => parseReporters("lcov,junit")).toThrow(/Unknown reporter/);
+  });
+
+  it("names the available reporters in the error", () => {
+    expect(() => parseReporters("nope")).toThrow(
+      /text, html, json, lcov, cobertura/
+    );
+  });
+
+  it("rejects an empty list", () => {
+    expect(() => parseReporters("  ")).toThrow(/at least one/);
+  });
+});
+
+describe("reporter selection", () => {
+  it("defaults to text, html and json", () => {
+    expect(resolveOptions({}, {}).reporters).toEqual(["text", "html", "json"]);
+  });
+
+  it("lets a flag select artefacts only", () => {
+    expect(parse(["-r", "lcov,cobertura"]).opts.reporters).toEqual([
+      "lcov",
+      "cobertura"
+    ]);
+  });
+
+  it("reads reporters from package.json", () => {
+    expect(resolveOptions({}, { reporters: ["lcov"] }).reporters).toEqual([
+      "lcov"
+    ]);
+  });
+
+  it("lets the flag win over package.json", () => {
+    expect(
+      resolveOptions({ reporters: ["json"] }, { reporters: ["lcov"] }).reporters
+    ).toEqual(["json"]);
+  });
+});
+
+describe("the newly exposed ignore options", () => {
+  it.each([
+    ["--ignore-nested", "ignoreNested"],
+    ["--ignore-as-assertion", "ignoreAsAssertion"],
+    ["--ignore-type-assertion", "ignoreTypeAssertion"],
+    ["--ignore-non-null-assertion", "ignoreNonNullAssertion"],
+    ["--ignore-object", "ignoreObject"],
+    ["--ignore-empty-type", "ignoreEmptyType"]
+  ])("%s sets %s", (flag, key) => {
+    expect(parse([flag]).opts).toMatchObject({ [key]: true });
+  });
+
+  it("defaults them all to false", () => {
+    expect(resolveOptions({}, {})).toMatchObject({
+      ignoreNested: false,
+      ignoreAsAssertion: false,
+      ignoreTypeAssertion: false,
+      ignoreNonNullAssertion: false,
+      ignoreObject: false,
+      ignoreEmptyType: false
+    });
+  });
+
+  it("reads them from package.json", () => {
+    expect(
+      resolveOptions({}, { ignoreAsAssertion: true }).ignoreAsAssertion
+    ).toBe(true);
+  });
+});
+
+describe("--history-file", () => {
+  it("is parsed from the CLI", () => {
+    expect(parse(["--history-file", "cov.json"]).opts.historyFile).toBe(
+      "cov.json"
+    );
+  });
+
+  it("is read from package.json", () => {
+    expect(resolveOptions({}, { historyFile: "h.json" }).historyFile).toBe(
+      "h.json"
+    );
+  });
+
+  it("is undefined when not asked for", () => {
+    expect(resolveOptions({}, {}).historyFile).toBeUndefined();
   });
 });
