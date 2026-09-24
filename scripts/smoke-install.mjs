@@ -142,6 +142,25 @@ if (existsSync(jsonPath)) {
   );
 }
 
+// --- running twice in a row must be stable (#161, #140) -------------------
+// The fixture tsconfig deliberately has no "include", so the previous run"s
+// output is part of the TypeScript program. Before the fix this polluted the
+// table and then failed with ENOENT on the JSON it had just deleted.
+const second = run(["--outputDir", "out", "--threshold", "0"]);
+check(second === 0, `second consecutive run exited ${second}, expected 0`);
+
+if (existsSync(jsonPath)) {
+  const again = JSON.parse(readFileSync(jsonPath, "utf8"));
+  check(
+    Math.abs(again.percentage - data.percentage) < 0.001,
+    `percentage drifted between runs: ${data.percentage} then ${again.percentage}`
+  );
+  check(
+    !Object.keys(again.fileCounts ?? {}).some((f) => f.startsWith("out/")),
+    "the report listed its own output directory"
+  );
+}
+
 // --- the threshold gate still exits 2 ------------------------------------
 check(
   run(["--outputDir", "out-high", "--threshold", "100"]) === 2,
