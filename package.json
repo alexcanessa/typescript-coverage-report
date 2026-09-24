@@ -34,7 +34,7 @@
   "scripts": {
     "prebuild": "node scripts/clean.mjs",
     "build": "tsc",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json --noEmit",
     "lint": "eslint . --fix",
     "lint:ci": "eslint . --max-warnings=0",
     "format": "prettier --write .",
