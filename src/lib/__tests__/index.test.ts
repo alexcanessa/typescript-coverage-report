@@ -11,15 +11,10 @@ jest.mock("node:fs", () => ({
   default: {
     promises: {
       rm: jest.fn().mockResolvedValue(undefined),
-      mkdir: jest.fn().mockResolvedValue(undefined)
+      mkdir: jest.fn().mockResolvedValue(undefined),
+      cp: jest.fn().mockResolvedValue(undefined)
     }
   }
-}));
-
-jest.mock("ncp", () => ({
-  ncp: jest.fn((_src: string, _dest: string, done: (e: Error | null) => void) =>
-    done(null)
-  )
 }));
 
 jest.mock("../getCoverage", () => ({
@@ -38,6 +33,7 @@ const rm = fs.promises.rm as jest.MockedFunction<typeof fs.promises.rm>;
 const mkdir = fs.promises.mkdir as jest.MockedFunction<
   typeof fs.promises.mkdir
 >;
+const cp = fs.promises.cp as jest.MockedFunction<typeof fs.promises.cp>;
 
 const coverage = (overrides: Partial<CoverageData> = {}): CoverageData => ({
   fileCounts: new Map([["src/index.ts", { correctCount: 8, totalCount: 10 }]]),
@@ -156,6 +152,16 @@ describe("generateCoverageReport", () => {
     expect(generateJSON).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({ outputDir: expected })
+    );
+  });
+
+  it("copies the bundled assets into the output directory", async () => {
+    await generateCoverageReport({ outputDir: "coverage-ts", threshold: 80 });
+
+    expect(cp).toHaveBeenCalledWith(
+      expect.stringContaining("assets"),
+      path.join(path.resolve(process.cwd(), "coverage-ts"), "assets"),
+      { recursive: true }
     );
   });
 

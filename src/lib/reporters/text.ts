@@ -2,11 +2,12 @@ import Table, { Cell } from "cli-table3";
 import { CoverageData } from "../getCoverage";
 import chalk from "chalk";
 
-const coverageTable = new Table({
-  chars: { mid: "", "left-mid": "", "mid-mid": "", "right-mid": "" },
-  colAligns: ["left", "right", "right", "right", "right"],
-  style: { "padding-left": 1, "padding-right": 1 }
-});
+const createCoverageTable = () =>
+  new Table({
+    chars: { mid: "", "left-mid": "", "mid-mid": "", "right-mid": "" },
+    colAligns: ["left", "right", "right", "right", "right"],
+    style: { "padding-left": 1, "padding-right": 1 }
+  });
 
 const calculatePercantage = (correct: number, total: number): number => {
   if (total === 0) {
@@ -27,6 +28,10 @@ export const generate = (
   { fileCounts, percentage, total, covered, uncovered }: CoverageData,
   threshold: number
 ): string => {
+  // NOTE: Built per call. As module state, a second call to the exported
+  // library API appended to the first call's table.
+  const coverageTable = createCoverageTable();
+
   const headers = [
     "filenames" + chalk.gray(` (${fileCounts.size})`),
     "percent" + chalk.gray(` (${percentage.toFixed(2)}%)`),

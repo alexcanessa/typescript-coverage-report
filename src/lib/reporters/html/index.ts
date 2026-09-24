@@ -5,6 +5,15 @@ import { CoverageData } from "../../getCoverage";
 import { generateSummaryPage } from "./pages/summary";
 import { generateDetailsPage } from "./pages/details";
 import { escapeHTML, relativeToRoot, toURLPath } from "./escape";
+import {
+  CODEMIRROR_CSS,
+  CODEMIRROR_JAVASCRIPT_MODE_JS,
+  CODEMIRROR_JS,
+  ExternalAsset,
+  SEMANTIC_UI_CSS,
+  SORTTABLE_JS,
+  isExternalAsset
+} from "./assets";
 
 const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
@@ -27,14 +36,21 @@ const checkOrWriteFolder = (outputDir: string): string => {
   return outputDir;
 };
 
-const includeAsset = (filename: string): string => {
-  const extension = path.extname(filename);
+const includeAsset = (asset: string | ExternalAsset): string => {
+  const url = isExternalAsset(asset) ? asset.url : asset;
+  // Third-party assets are pinned by hash; local ones are copied from this
+  // package and have nothing to verify against.
+  const integrity = isExternalAsset(asset)
+    ? ` integrity="${asset.integrity}" crossorigin="anonymous" referrerpolicy="no-referrer"`
+    : "";
+  const extension = path.extname(new URL(url, "file:///").pathname);
+
   if (extension === ".js") {
-    return `<script src="${filename}" type="text/javascript" charset="utf-8"></script>`;
+    return `<script src="${url}" type="text/javascript" charset="utf-8"${integrity}></script>`;
   }
 
   if (extension === ".css") {
-    return `<link href="${filename}" type="text/css" rel="stylesheet">`;
+    return `<link href="${url}" type="text/css" rel="stylesheet"${integrity}>`;
   }
 
   console.warn(`includeAsset: couldn't recognise the extension ${extension}`);
@@ -42,7 +58,7 @@ const includeAsset = (filename: string): string => {
   return "";
 };
 
-const includeAssets = (assets: readonly string[]): string =>
+const includeAssets = (assets: readonly (string | ExternalAsset)[]): string =>
   assets.map(includeAsset).join("\n");
 
 const wrapHTMLContent = (
@@ -65,9 +81,7 @@ const wrapHTMLContent = (
   <html>
     <head>
       <title>${escapeHTML(options.title || "TypeScript coverage report")}</title>
-      ${includeAsset(
-        "https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
-      )}
+      ${includeAsset(SEMANTIC_UI_CSS)}
       ${options.assets || ""}
     </head>
     <body>
@@ -95,10 +109,7 @@ export const generate = async (
       threshold: options.threshold
     },
     {
-      assets: includeAssets([
-        "./assets/report.css",
-        "https://cdn.jsdelivr.net/npm/sorttable@1.0.2/sorttable.min.js"
-      ])
+      assets: includeAssets(["./assets/report.css", SORTTABLE_JS])
     }
   );
 
@@ -143,9 +154,9 @@ export const generate = async (
       {
         title: path.basename(filename),
         assets: includeAssets([
-          "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.js",
-          "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/mode/javascript/javascript.min.js",
-          "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.2/codemirror.min.css",
+          CODEMIRROR_JS,
+          CODEMIRROR_JAVASCRIPT_MODE_JS,
+          CODEMIRROR_CSS,
           toURLPath(`${assetsFolder}/report.css`),
           toURLPath(`${assetsFolder}/source-file.js`)
         ])
