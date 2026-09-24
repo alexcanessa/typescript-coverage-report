@@ -112,12 +112,13 @@ describe("excludeOutputDir", () => {
       ["coverage-ts-old/keep.ts", { correctCount: 2, totalCount: 4 }]
     ]),
     anys: [
-      { file: "src/index.ts", line: 1, character: 1, text: "any" },
+      { file: "src/index.ts", line: 1, character: 1, text: "any", kind: 1 },
       {
         file: "coverage-ts/assets/source-file.js",
         line: 2,
         character: 1,
-        text: "any"
+        text: "any",
+        kind: 1
       }
     ],
     percentage: 78.94,
@@ -139,7 +140,7 @@ describe("excludeOutputDir", () => {
     const result = excludeOutputDir(data, "coverage-ts", cwd);
 
     expect(result.anys).toEqual([
-      { file: "src/index.ts", line: 1, character: 1, text: "any" }
+      { file: "src/index.ts", line: 1, character: 1, text: "any", kind: 1 }
     ]);
   });
 
