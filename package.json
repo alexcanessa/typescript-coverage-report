@@ -44,9 +44,11 @@
     "test": "jest",
     "test:ci": "jest --ci --coverage",
     "type-coverage": "node ./dist/bin/typescript-coverage-report.js",
-    "docs": "pnpm run type-coverage -- --outputDir docs",
+    "docs": "pnpm run type-coverage --outputDir docs",
     "prepare": "husky",
-    "prepack": "pnpm run build"
+    "prepack": "pnpm run build",
+    "check:package": "node scripts/check-package.mjs",
+    "e2e": "node scripts/smoke-install.mjs"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",

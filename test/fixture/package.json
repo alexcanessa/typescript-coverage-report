@@ -1,0 +1,9 @@
+{
+  "name": "tcr-fixture",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Fixture project used by the packaged end-to-end smoke test.",
+  "typeCoverage": {
+    "atLeast": 0
+  }
+}
