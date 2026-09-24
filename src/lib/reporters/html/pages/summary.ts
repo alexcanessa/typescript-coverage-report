@@ -1,4 +1,4 @@
-import path from "node:path";
+import { escapeHTML, toURLPath } from "../escape";
 import type { CoverageData } from "../../../getCoverage";
 
 type GenerateSummaryPageContext = Omit<CoverageData, "anys"> & {
@@ -20,12 +20,12 @@ const generateSummaryTableRow = ({
   const percentageCoverage = percentage.toFixed(2) + "%";
   const isValid = percentage >= threshold;
 
-  const pathToFile = path.join("files", `${filename}.html`);
+  const pathToFile = toURLPath(`files/${filename}.html`);
 
   return `
     <tr class="${isValid ? "positive" : "negative"}">
-      <td title="${filename}">
-        <a style="color: inherit;" href="${pathToFile}">${filename}</a>
+      <td title="${escapeHTML(filename)}">
+        <a style="color: inherit;" href="${pathToFile}">${escapeHTML(filename)}</a>
       </td>
       <td>${percentageCoverage}</td>
       <td>${totalCount}</td>

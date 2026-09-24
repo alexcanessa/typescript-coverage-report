@@ -1,4 +1,4 @@
-import path from "node:path";
+import { escapeHTML, relativeToRoot, toURLPath } from "../escape";
 
 type Annotation = {
   file: string;
@@ -28,12 +28,21 @@ export const generateDetailsPage = ({
   const percentageCoverage = percentage.toFixed(2) + "%";
   const isValid = percentage >= threshold;
 
-  const relativePathToIndex = path.relative(`${filename}.html`, "index.html");
+  const relativePathToIndex = `${relativeToRoot(filename)}index.html`;
 
+  // NOTE: The source and the annotations are both escaped. The browser
+  // decodes entities back to the original text before CodeMirror reads
+  // textarea.value and before JSON.parse sees the annotations' textContent,
+  // so the editor still receives byte-identical source.
+  //
+  // NOTE: There must be no newline between the opening textarea tag and the
+  // content. HTML parsers strip exactly one leading newline inside a
+  // textarea, which would shift every line by one and misplace every
+  // CodeMirror gutter marker.
   return `
     <div style="margin-top: 3em;" class="ui container">
       <h1 class="ui header">
-        <a href="${relativePathToIndex}">TypeScript coverage report</a>
+        <a href="${toURLPath(relativePathToIndex)}">TypeScript coverage report</a>
       </h1>
       <table class="ui table celled fixed">
         <thead>
@@ -48,7 +57,7 @@ export const generateDetailsPage = ({
         </thead>
         <tbody>
           <tr class="${isValid ? "positive" : "negative"}">
-            <td>${filename}</td>
+            <td>${escapeHTML(filename)}</td>
             <td>${percentageCoverage}</td>
             <td>${threshold}%</td>
             <td>${totalCount}</td>
@@ -61,9 +70,9 @@ export const generateDetailsPage = ({
         id="editor"
         readonly
         style="margin-top: 3em;"
-      >${sourceCode}</textarea>
+      >${escapeHTML(sourceCode)}</textarea>
       <pre id="annotations" style="display: none;">
-        ${JSON.stringify(annotations)}
+        ${escapeHTML(JSON.stringify(annotations))}
       </pre>
     </div>
   `;
