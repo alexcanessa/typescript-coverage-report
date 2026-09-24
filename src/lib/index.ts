@@ -4,6 +4,7 @@ import getCoverage, { Options, CoverageData } from "./getCoverage";
 import { DEFAULT_REPORTERS, ReporterName, runReporters } from "./reporters";
 import { appendHistory } from "./history";
 import { createProgress } from "./progress";
+import { excludeGitIgnored } from "./gitignore";
 import { Comparison, compareToBaseline, readBaseline } from "./compare";
 import {
   assertSafeOutputDir,
@@ -18,6 +19,7 @@ export type ProgramOptions = Options & {
   generatedAt?: Date;
   historyFile?: string;
   compare?: string;
+  respectGitignore?: boolean;
 };
 
 const withOutputDirIgnored = (
@@ -79,7 +81,19 @@ export default async function generateCoverageReport(
   // against working-directory-relative paths. This filter is the guarantee.
   progress.update("Generating report...");
 
-  const data = excludeOutputDir(raw, options.outputDir);
+  let data = excludeOutputDir(raw, options.outputDir);
+
+  if (options.respectGitignore) {
+    const filtered = excludeGitIgnored(data);
+
+    if (filtered.unavailable) {
+      console.warn(
+        `--respect-gitignore was asked for but could not be applied: ${filtered.unavailable}`
+      );
+    }
+
+    data = filtered.data;
+  }
 
   const reporters = options.reporters ?? DEFAULT_REPORTERS;
 

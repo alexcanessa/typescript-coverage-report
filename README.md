@@ -93,6 +93,7 @@ The CLI accepts a list of arguments:
 | `-u, --ignore-unread`         | Allow writes to variables with implicit any types.                            | false          |
 | `-r, --reporters <list>`      | Which reporters to run: `text`, `html`, `json`, `lcov`, `cobertura`.          | text,html,json |
 | `--config <path>`             | Path to a config file.                                                        | auto-detected  |
+| `--respect-gitignore`         | Exclude files that git ignores.                                               | false          |
 | `--compare <path>`            | Exit 3 if any file decreased versus an earlier report.                        | none           |
 | `--history-file <path>`       | Append this run’s totals to a JSON file.                                      | none           |
 | `--ignore-nested`             | Ignore nested anys, such as `Promise<any>`.                                   | false          |
@@ -177,6 +178,18 @@ Uploading `lcov.info` is what lets Codecov, Coveralls or SonarQube tell you that
   with:
     files: coverage-ts/lcov.info
 ```
+
+### Ignoring files git ignores
+
+`--respect-gitignore` drops files that git ignores, even when your `tsconfig.json` compiles them:
+
+```shell
+$ typescript-coverage-report --respect-gitignore
+```
+
+This is off by default, because the report is meant to reflect what TypeScript actually compiled. It is useful when `tsconfig.json` has no `exclude` and a build directory ends up in the program.
+
+`git check-ignore` is asked rather than `.gitignore` being parsed, so negation, nested `.gitignore` files, precedence and directory rules all behave exactly as git does. Outside a git repository the flag warns and changes nothing, rather than silently dropping files.
 
 ### Failing when a file gets worse
 
