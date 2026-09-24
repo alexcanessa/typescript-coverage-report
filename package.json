@@ -3,9 +3,14 @@
   "version": "1.1.1",
   "description": "Node command tool to generate TypeScript coverage report.",
   "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
   "bin": {
     "typescript-coverage-report": "dist/bin/typescript-coverage-report.js"
   },
+  "files": [
+    "dist",
+    "assets"
+  ],
   "repository": "git@github.com:alexcanessa/typescript-coverage-report.git",
   "author": "Alex Canessa <canessa.alex@gmail.com>",
   "license": "MIT",
@@ -29,6 +34,7 @@
     "type-coverage-core": "^2.23.0"
   },
   "scripts": {
+    "prebuild": "node scripts/clean.mjs",
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --fix",
@@ -39,7 +45,8 @@
     "test:ci": "jest --ci --coverage",
     "type-coverage": "node ./dist/bin/typescript-coverage-report.js",
     "docs": "pnpm run type-coverage -- --outputDir docs",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prepack": "pnpm run build"
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
