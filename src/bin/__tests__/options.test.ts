@@ -269,3 +269,33 @@ describe("--history-file", () => {
     expect(resolveOptions({}, {}).historyFile).toBeUndefined();
   });
 });
+
+describe("--allow-empty", () => {
+  it("is off by default, so an empty run fails", () => {
+    expect(resolveOptions({}, {}).allowEmpty).toBe(false);
+  });
+
+  it("is set by the flag", () => {
+    expect(parse(["--allow-empty"]).opts.allowEmpty).toBe(true);
+  });
+
+  it("is read from the config file", () => {
+    expect(resolveOptions({}, { allowEmpty: true }).allowEmpty).toBe(true);
+  });
+});
+
+describe("--respect-gitignore", () => {
+  it("is off by default", () => {
+    expect(resolveOptions({}, {}).respectGitignore).toBe(false);
+  });
+
+  it("is set by the flag", () => {
+    expect(parse(["--respect-gitignore"]).opts.respectGitignore).toBe(true);
+  });
+
+  it("is read from the config file", () => {
+    expect(
+      resolveOptions({}, { respectGitignore: true }).respectGitignore
+    ).toBe(true);
+  });
+});

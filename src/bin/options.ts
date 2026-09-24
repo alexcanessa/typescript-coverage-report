@@ -22,6 +22,7 @@ export type TypeCoverageConfig = {
   historyFile?: string;
   compare?: string;
   respectGitignore?: boolean;
+  allowEmpty?: boolean;
   ignoreNested?: boolean;
   ignoreAsAssertion?: boolean;
   ignoreTypeAssertion?: boolean;
@@ -52,6 +53,7 @@ export type CliOptions = {
   ignoreEmptyType?: boolean;
   compare?: string;
   respectGitignore?: boolean;
+  allowEmpty?: boolean;
 };
 
 export type ResolvedOptions = {
@@ -69,6 +71,7 @@ export type ResolvedOptions = {
   historyFile?: string;
   compare?: string;
   respectGitignore: boolean;
+  allowEmpty: boolean;
   ignoreNested: boolean;
   ignoreAsAssertion: boolean;
   ignoreTypeAssertion: boolean;
@@ -206,6 +209,7 @@ export const resolveOptions = (
   historyFile: cli.historyFile ?? config.historyFile,
   compare: cli.compare ?? config.compare,
   respectGitignore: cli.respectGitignore ?? config.respectGitignore ?? false,
+  allowEmpty: cli.allowEmpty ?? config.allowEmpty ?? false,
   ignoreNested: cli.ignoreNested ?? config.ignoreNested ?? false,
   ignoreAsAssertion: cli.ignoreAsAssertion ?? config.ignoreAsAssertion ?? false,
   ignoreTypeAssertion:
@@ -264,6 +268,10 @@ export const createProgram = ({
     .option(
       "--history-file <path>",
       "append this run's totals to a JSON file, for tracking coverage over time"
+    )
+    .option(
+      "--allow-empty",
+      "succeed when no files were analysed, instead of failing"
     )
     .option(
       "--respect-gitignore",
