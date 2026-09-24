@@ -110,6 +110,23 @@ Two things are configured outside the repository and are not yet done:
    `RELEASE_CLIENT_ID` variable and its key in the `RELEASE_APP_PRIVATE_KEY`
    secret. If releases ever stop opening, check the App installation first.
 
+### What happens when a release goes out
+
+Merging the release pull request tags the release, publishes to npm from CI,
+and then comments on every issue that release closed to say it shipped, with
+the version and an install line.
+
+That last step exists because closing an issue when the fix merges is not the
+same as it being usable. On this project the gap between "fixed on main" and
+"published" has historically been months, and issues #21 and #28 exist purely
+because nobody was told.
+
+It works from the squash history: each commit on `main` carries its pull
+request number, and GitHub knows which issues each pull request closed. So an
+issue is only notified if a pull request actually closed it -- one closed by
+hand will not be. The comments are idempotent, so re-running a release never
+double-posts.
+
 ## Tests
 
 Snapshots live next to the tests that create them. If a change to the report
