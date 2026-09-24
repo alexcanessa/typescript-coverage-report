@@ -5,6 +5,7 @@ import getCoverage from "../getCoverage";
 import { generate as generateHTML } from "../reporters/html";
 import { generate as generateJSON } from "../reporters/json";
 import type { CoverageData } from "../getCoverage";
+import { readBaseline } from "../compare";
 
 jest.mock("node:fs", () => ({
   __esModule: true,
@@ -25,6 +26,15 @@ jest.mock("../getCoverage", () => ({
 jest.mock("../reporters/text", () => ({ generate: jest.fn(() => "") }));
 jest.mock("../reporters/html", () => ({ generate: jest.fn() }));
 jest.mock("../reporters/json", () => ({ generate: jest.fn() }));
+
+jest.mock("../compare", () => ({
+  readBaseline: jest.fn().mockResolvedValue({ percentage: 0, fileCounts: {} }),
+  compareToBaseline: jest.fn(() => ({
+    decreased: [],
+    overallBefore: 0,
+    overallAfter: 0
+  }))
+}));
 
 const mockedGetCoverage = getCoverage as jest.MockedFunction<
   typeof getCoverage
@@ -171,5 +181,41 @@ describe("generateCoverageReport", () => {
     ).rejects.toThrow(/current directory/);
 
     expect(rm).not.toHaveBeenCalled();
+  });
+});
+
+describe("comparison", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(console, "log").mockImplementation(() => undefined);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it("attaches a comparison when a baseline is given", async () => {
+    const result = await generateCoverageReport({
+      outputDir: "coverage-ts",
+      threshold: 80,
+      compare: "base.json"
+    });
+
+    expect(readBaseline).toHaveBeenCalledWith("base.json");
+    expect(result.comparison).toEqual({
+      decreased: [],
+      overallBefore: 0,
+      overallAfter: 0
+    });
+  });
+
+  it("does not read a baseline when none is given", async () => {
+    const result = await generateCoverageReport({
+      outputDir: "coverage-ts",
+      threshold: 80
+    });
+
+    expect(readBaseline).not.toHaveBeenCalled();
+    expect(result).not.toHaveProperty("comparison");
   });
 });

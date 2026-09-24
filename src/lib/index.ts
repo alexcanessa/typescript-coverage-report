@@ -3,6 +3,7 @@ import fs from "node:fs";
 import getCoverage, { Options, CoverageData } from "./getCoverage";
 import { DEFAULT_REPORTERS, ReporterName, runReporters } from "./reporters";
 import { appendHistory } from "./history";
+import { Comparison, compareToBaseline, readBaseline } from "./compare";
 import {
   assertSafeOutputDir,
   excludeOutputDir,
@@ -15,6 +16,7 @@ export type ProgramOptions = Options & {
   reporters?: readonly ReporterName[];
   generatedAt?: Date;
   historyFile?: string;
+  compare?: string;
 };
 
 const withOutputDirIgnored = (
@@ -36,9 +38,13 @@ const withOutputDirIgnored = (
   return [glob];
 };
 
+export type CoverageReport = CoverageData & {
+  comparison?: Comparison;
+};
+
 export default async function generateCoverageReport(
   options: ProgramOptions
-): Promise<CoverageData> {
+): Promise<CoverageReport> {
   const outputDir = path.resolve(process.cwd(), options.outputDir);
 
   assertSafeOutputDir(options.outputDir);
@@ -92,6 +98,13 @@ export default async function generateCoverageReport(
 
   if (options.historyFile) {
     await appendHistory(data, options.historyFile, options.generatedAt);
+  }
+
+  if (options.compare) {
+    return {
+      ...data,
+      comparison: compareToBaseline(data, await readBaseline(options.compare))
+    };
   }
 
   return data;
