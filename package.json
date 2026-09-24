@@ -42,7 +42,7 @@
     "test": "jest",
     "test:ci": "jest --ci --coverage",
     "type-coverage": "node ./dist/bin/typescript-coverage-report.js",
-    "docs": "pnpm run type-coverage --outputDir docs",
+    "docs": "pnpm run type-coverage --outputDir _site",
     "prepare": "husky",
     "prepack": "pnpm run build",
     "check:package": "node scripts/check-package.mjs",
