@@ -21,6 +21,7 @@ export type TypeCoverageConfig = {
   reporters?: string[];
   historyFile?: string;
   compare?: string;
+  respectGitignore?: boolean;
   ignoreNested?: boolean;
   ignoreAsAssertion?: boolean;
   ignoreTypeAssertion?: boolean;
@@ -50,6 +51,7 @@ export type CliOptions = {
   ignoreObject?: boolean;
   ignoreEmptyType?: boolean;
   compare?: string;
+  respectGitignore?: boolean;
 };
 
 export type ResolvedOptions = {
@@ -66,6 +68,7 @@ export type ResolvedOptions = {
   reporters: ReporterName[];
   historyFile?: string;
   compare?: string;
+  respectGitignore: boolean;
   ignoreNested: boolean;
   ignoreAsAssertion: boolean;
   ignoreTypeAssertion: boolean;
@@ -202,6 +205,7 @@ export const resolveOptions = (
     DEFAULT_REPORTERS,
   historyFile: cli.historyFile ?? config.historyFile,
   compare: cli.compare ?? config.compare,
+  respectGitignore: cli.respectGitignore ?? config.respectGitignore ?? false,
   ignoreNested: cli.ignoreNested ?? config.ignoreNested ?? false,
   ignoreAsAssertion: cli.ignoreAsAssertion ?? config.ignoreAsAssertion ?? false,
   ignoreTypeAssertion:
@@ -260,6 +264,10 @@ export const createProgram = ({
     .option(
       "--history-file <path>",
       "append this run's totals to a JSON file, for tracking coverage over time"
+    )
+    .option(
+      "--respect-gitignore",
+      "exclude files that git ignores, even when tsconfig compiles them"
     )
     .option(
       "--compare <path>",
