@@ -3,10 +3,11 @@ import type { CoverageData } from "../getCoverage";
 /**
  * Project identifier-level type coverage onto lines.
  *
- * Type coverage counts *identifiers*, but LCOV and Cobertura are line-based.
- * The established convention for this class of tool -- flow-coverage-report,
- * which this project was modelled on, does the same -- is to mark a line as
- * uncovered when it contains at least one uncovered identifier.
+ * Type coverage counts *identifiers*, but LCOV and Cobertura are line-based,
+ * so something has to give. A line is marked uncovered when it contains at
+ * least one uncovered identifier, which is the only mapping that never hides
+ * an `any`: the alternative, marking a line covered when *most* of its
+ * identifiers are, would let a bad line disappear into a good one.
  *
  * Blank lines and comment-only lines are excluded from the denominator, so a
  * file padded with licence headers does not score better than one without.

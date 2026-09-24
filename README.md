@@ -175,7 +175,7 @@ Uploading `lcov.info` is what lets Codecov, Coveralls or SonarQube tell you that
 
 ```yaml
 - run: npx typescript-coverage-report --reporters lcov --threshold 90
-- uses: codecov/codecov-action@v5
+- uses: codecov/codecov-action@v7
   with:
     files: coverage-ts/lcov.info
 ```
@@ -231,13 +231,23 @@ Type coverage went from 92.31% to 88.46%.
 
 Percentages are compared rather than raw counts, so adding covered code to a file is never a regression. Files that are new since the baseline are ignored — the overall `--threshold` is what guards those.
 
-Exit codes: `0` fine, `2` below threshold, `3` a file decreased, `255` something went wrong.
+Exit codes:
+
+| Code  | Meaning                                                       |
+| ----- | ------------------------------------------------------------- |
+| `0`   | fine                                                          |
+| `1`   | a usage problem: a bad config file, or no files were analysed |
+| `2`   | coverage is below `--threshold`                               |
+| `3`   | a file decreased against `--compare`                          |
+| `255` | something went wrong                                          |
+
+`3` is checked before `2`, so a run that is both below threshold and regressed reports the regression.
 
 The tool deliberately knows nothing about git. You supply the baseline however suits you — a base-branch checkout, a stored CI artifact, or a committed file — which keeps this usable outside CI too.
 
 ### How line coverage is derived
 
-Type coverage counts **identifiers**, but `lcov` and Cobertura are line-based. A line is reported as covered when it contains no uncovered identifier, and uncovered when it contains at least one — the same projection [`flow-coverage-report`](https://github.com/rpl/flow-coverage-report) uses. Blank and comment-only lines are left out of the denominator.
+Type coverage counts **identifiers**, but `lcov` and Cobertura are line-based. A line is reported as covered when it contains no uncovered identifier, and uncovered when it contains at least one. Blank and comment-only lines are left out of the denominator.
 
 This means the line rate in those artifacts is not identical to the identifier percentage in the terminal table. The identifier-level numbers are the authoritative ones, and they are what the exit code and `typescript-coverage.json` use.
 
