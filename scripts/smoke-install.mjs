@@ -161,6 +161,43 @@ if (existsSync(jsonPath)) {
   );
 }
 
+// --- the report escapes what it renders (#173) ----------------------------
+// test/fixture/src/tricky.ts contains a literal closing textarea tag, raw
+// angle brackets and entity text. Unescaped, the tag terminates the editor
+// early and everything after it stops being source code.
+const trickyPage = path.join(project, "out/files/src/tricky.ts.html");
+if (existsSync(trickyPage)) {
+  const html = readFileSync(trickyPage, "utf8");
+  const closingTags = html.match(/<\/textarea>/g) ?? [];
+
+  check(
+    closingTags.length === 1,
+    `expected exactly one closing textarea tag, found ${closingTags.length}`
+  );
+  check(
+    !html.includes("<script>alert(1)</script>"),
+    "raw script markup from the source leaked into the report"
+  );
+
+  const annotations = /<pre id="annotations"[^>]*>([\s\S]*?)<\/pre>/.exec(html);
+  check(annotations !== null, "the annotations block is missing");
+  if (annotations) {
+    const decoded = annotations[1]
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, String.fromCharCode(34))
+      .replace(/&#39;/g, String.fromCharCode(39))
+      .replace(/&amp;/g, "&");
+    try {
+      JSON.parse(decoded);
+    } catch (error) {
+      failures.push(
+        `the annotations block is not valid JSON: ${error.message}`
+      );
+    }
+  }
+}
+
 // --- the threshold gate still exits 2 ------------------------------------
 check(
   run(["--outputDir", "out-high", "--threshold", "100"]) === 2,
