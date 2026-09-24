@@ -1,112 +1,48 @@
 #!/usr/bin/env node
 
-import { program } from "commander";
-import generateCoverageReport, { ProgramOptions } from "../lib";
-import path from "path";
+import path from "node:path";
 import { IPackageJson } from "package-json-type";
-
-type TypeCoverageConfig = {
-  outputDir?: string;
-  atLeast?: number;
-  strict?: boolean;
-  debug?: boolean;
-  cache?: boolean;
-  project?: string;
-  ignoreFiles?: boolean;
-  ignoreCatch?: boolean;
-  ignoreUnread?: boolean;
-};
+import generateCoverageReport from "../lib";
+import {
+  CliOptions,
+  TypeCoverageConfig,
+  createProgram,
+  resolveOptions
+} from "./options";
 
 const { version, description }: IPackageJson = require("../../package.json");
 
-const {
-  typeCoverage = {}
-}: IPackageJson & { typeCoverage?: TypeCoverageConfig } = require(
-  path.join(process.cwd(), "/package.json")
-);
+/**
+ * Read the consumer's package.json for a `typeCoverage` block.
+ *
+ * Guarded because this used to run unconditionally at module scope: in a
+ * directory without a package.json the CLI died with MODULE_NOT_FOUND before
+ * commander could so much as print --help.
+ */
+const readTypeCoverageConfig = (): TypeCoverageConfig => {
+  try {
+    const pkg: IPackageJson & { typeCoverage?: TypeCoverageConfig } = require(
+      path.join(process.cwd(), "package.json")
+    );
 
-const argvWithVersion = (argvs: string[]): string[] => {
-  const vPos = argvs.indexOf("-v");
-
-  if (vPos > -1) {
-    argvs[vPos] = "-V";
+    return pkg.typeCoverage ?? {};
+  } catch {
+    return {};
   }
-
-  return argvs;
 };
 
-const {
-  outputDir = "coverage-ts",
-  atLeast = 80,
-  strict = false,
-  debug = false,
-  cache = false,
-  project = ".",
-  ignoreFiles = false,
-  ignoreCatch = false,
-  ignoreUnread = false
-} = typeCoverage;
+const program = createProgram({
+  version: version ?? "",
+  description: description ?? ""
+});
 
-program
-  .version(version ?? "")
-  .description(description ?? "")
-  .option(
-    "-o, --outputDir [string]",
-    "the output directory where to generate the report.",
-    outputDir
-  )
-  .option(
-    "-t, --threshold [number]",
-    "the minimum percentage of coverage required.",
-    parseFloat,
-    atLeast
-  )
-  .option("-s, --strict [boolean]", "run the check in strict mode.", strict)
-  .option("-d, --debug [boolean]", "show debug information.", debug)
-  .option(
-    "-c, --cache [boolean]",
-    "save and reuse type check result from cache.",
-    cache
-  )
-  .option(
-    "-p, --project [string]",
-    'file path to tsconfig file, eg: --project "./app/tsconfig.app.json"',
-    project
-  )
-  .option(
-    "-i, --ignore-files [string[]]",
-    'ignore specified files, eg: --ignore-files "demo1/*.ts" --ignore-files "demo2/foo.ts"',
-    ignoreFiles
-  )
-  .option(
-    "--ignore-catch [boolean]",
-    "ignore type any for (try-)catch clause variable",
-    ignoreCatch
-  )
-  .option(
-    "-u, --ignore-unread [boolean]",
-    "allow writes to variables with implicit any types",
-    ignoreUnread
-  )
-  .option(
-    "-- [string[]]",
-    "only checks these files, useful for usage with tools like lint-staged"
-  )
-  .parse(argvWithVersion(process.argv));
+program.parse();
 
-const options: ProgramOptions = {
-  /* camelCase keys matching "long" flags in options above */
-  outputDir: program.outputDir,
-  threshold: program.threshold,
-  tsProjectFile: program.project,
-  strict: program.strict,
-  debug: program.debug,
-  cache: program.cache,
-  ignoreFiles: program.ignoreFiles,
-  ignoreCatch: program.ignoreCatch,
-  ignoreUnread: program.ignoreUnread,
-  files: program.args.length > 0 ? program.args : undefined
-};
+const options = resolveOptions(
+  program.opts<CliOptions>(),
+  readTypeCoverageConfig(),
+  program.args
+);
 
 generateCoverageReport(options)
   .then(({ percentage }) => {

@@ -80,16 +80,25 @@ As an alternative, options may be provided through the `type-coverage` [configur
 
 The CLI accepts a list of arguments:
 
-| Option                          | Description                                                                            | Default value |
-| ------------------------------- | -------------------------------------------------------------------------------------- | ------------- |
-| `-t, --threshold [number]`      | The minimum percentage of coverage required.                                           | 80            |
-| `-o, --outputDir [string]`      | The output directory where to generate the report.                                     | coverage-ts   |
-| `-s, --strict [boolean]`        | Run the check in strict mode.                                                          | false         |
-| `-d, --debug [boolean]`         | Show debug information.                                                                | false         |
-| `-c, --cache [boolean]`         | Save and reuse type check result from cache.                                           | false         |
-| `-p, --project [string]`        | File path to tsconfig file, eg: --project "./app/tsconfig.app.json"                    | .             |
-| `-i, --ignore-files [boolean]`  | Ignore specified files, eg: --ignore-files "demo1/\*.ts" --ignore-files "demo2/foo.ts" | false         |
-| `-u, --ignore-unread [boolean]` | Allow writes to variables with implicit any types                                      | false         |
+| Option                      | Description                                                                   | Default value |
+| --------------------------- | ----------------------------------------------------------------------------- | ------------- |
+| `-t, --threshold <number>`  | The minimum percentage of coverage required.                                  | 80            |
+| `-o, --outputDir <path>`    | The output directory where to generate the report.                            | coverage-ts   |
+| `-s, --strict`              | Run the check in strict mode.                                                 | false         |
+| `-d, --debug`               | Show debug information.                                                       | false         |
+| `-c, --cache`               | Save and reuse type check result from cache.                                  | false         |
+| `-p, --project <path>`      | File path to the tsconfig file, eg: `--project "./app/tsconfig.app.json"`     | .             |
+| `-i, --ignore-files <glob>` | Ignore files matching a glob. Repeatable: `-i "demo1/*.ts" -i "demo2/foo.ts"` | none          |
+| `--ignore-catch`            | Ignore type `any` for (try-)catch clause variables.                           | false         |
+| `-u, --ignore-unread`       | Allow writes to variables with implicit any types.                            | false         |
+| `-v, --version`             | Print the version.                                                            |               |
+| `-h, --help`                | Print the usage information.                                                  |               |
+
+Any trailing arguments are treated as the only files to check, which is useful with tools like `lint-staged`:
+
+```shell
+$ typescript-coverage-report src/one.ts src/two.ts
+```
 
 ## Maintainers
 

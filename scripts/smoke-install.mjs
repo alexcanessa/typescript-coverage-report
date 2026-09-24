@@ -204,6 +204,33 @@ check(
   "CLI should exit 2 when coverage is below the threshold"
 );
 
+// --- repeated --ignore-files are all honoured (#118) ----------------------
+// The first glob matches, the second matches nothing. If only the last
+// occurrence won, as it did before, tricky.ts would still be reported.
+const ignored = run([
+  "--outputDir",
+  "out-ignore",
+  "--threshold",
+  "0",
+  "-i",
+  "src/tricky.ts",
+  "-i",
+  "src/does-not-exist.ts"
+]);
+check(ignored === 0, `run with repeated -i exited ${ignored}`);
+
+const ignoredJson = path.join(project, "out-ignore/typescript-coverage.json");
+if (existsSync(ignoredJson)) {
+  const reported = Object.keys(
+    JSON.parse(readFileSync(ignoredJson, "utf8")).fileCounts ?? {}
+  );
+
+  check(
+    !reported.some((f) => f.includes("tricky")),
+    `the first -i glob was discarded; still reported: ${reported.join(", ")}`
+  );
+}
+
 // --- report drift across the matrix rather than asserting an exact number --
 const summary =
   `| ${process.version} | ts ${tsVersion} | ${process.platform} | ` +
