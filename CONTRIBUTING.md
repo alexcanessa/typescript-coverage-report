@@ -103,12 +103,12 @@ Two things are configured outside the repository and are not yet done:
    the publish step will fail. Once it works, require trusted publishing on the
    package and revoke any legacy automation tokens: that is what makes
    publishing from a laptop impossible rather than merely discouraged.
-2. **A GitHub App token for release-please.** It currently runs with the
-   default `GITHUB_TOKEN`, and pull requests created with that token do not
-   trigger workflows -- so the release pull request does not run CI. This must
-   be swapped for a GitHub App token **before** required status checks are
-   enabled on `main`, or the release pull request can never satisfy them and
-   releases deadlock.
+2. ~~A GitHub App token for release-please.~~ **Done.** release-please runs as
+   a GitHub App rather than with the default `GITHUB_TOKEN`, whose events
+   GitHub suppresses -- the symptom here was runs on the release pull request
+   parking at `action_required` and never executing. The App ID lives in the
+   `RELEASE_APP_ID` variable and its key in the `RELEASE_APP_PRIVATE_KEY`
+   secret. If releases ever stop opening, check the App installation first.
 
 ## Tests
 

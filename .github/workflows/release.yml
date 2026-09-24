@@ -37,16 +37,31 @@ jobs:
       tag: ${{ steps.release.outputs.tag_name }}
       version: ${{ steps.release.outputs.version }}
     steps:
-      # NOTE: This uses the default GITHUB_TOKEN. Pull requests it creates do
-      # not trigger workflows, so the release pull request will not run CI.
-      # That is tolerable while main is unprotected, but it MUST be swapped
-      # for a GitHub App token before required status checks are turned on,
-      # or the release pull request can never satisfy them and the release
-      # process deadlocks. See CONTRIBUTING.md.
+      # A GitHub App token, not the default GITHUB_TOKEN.
+      #
+      # GitHub suppresses workflow runs for events caused by GITHUB_TOKEN, to
+      # stop a workflow endlessly retriggering itself. In this repository the
+      # symptom was runs on the release pull request parking at
+      # "action_required" and never executing, so the required CI check never
+      # reported. Once main requires that check, the release pull request
+      # could never satisfy it and releases would deadlock.
+      #
+      # An App is a separate identity, so its pushes trigger workflows
+      # normally. The token it mints expires in about an hour.
+      #
+      # There is deliberately no fallback to GITHUB_TOKEN: if this step fails
+      # the release should stop loudly, rather than quietly producing a pull
+      # request that can never be merged.
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
       - uses: googleapis/release-please-action@v5
         id: release
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
