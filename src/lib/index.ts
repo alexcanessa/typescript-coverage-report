@@ -1,7 +1,5 @@
 import path from "node:path";
 import fs from "node:fs";
-import { promisify } from "node:util";
-import { ncp } from "ncp";
 import getCoverage, { Options, CoverageData } from "./getCoverage";
 import { generate as generateText } from "./reporters/text";
 import { generate as generateHTML } from "./reporters/html";
@@ -11,8 +9,6 @@ import {
   excludeOutputDir,
   outputDirIgnoreGlob
 } from "./outputDir";
-
-const asyncNcp = promisify(ncp);
 
 export type ProgramOptions = Options & {
   outputDir: string;
@@ -78,9 +74,13 @@ export default async function generateCoverageReport(
   const reporterOptions = { ...options, outputDir };
 
   await generateHTML(data, reporterOptions);
-  await asyncNcp(
+
+  // NOTE: fs.cp replaces the ncp dependency, which was last touched in 2016.
+  // It is stable from Node 22.3, below the 22.12 engines floor.
+  await fs.promises.cp(
     path.join(__dirname, "../../assets"),
-    path.join(outputDir, "assets")
+    path.join(outputDir, "assets"),
+    { recursive: true }
   );
 
   await generateJSON(data, reporterOptions);
