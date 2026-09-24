@@ -5,3 +5,4 @@ coverage-ts/
 yarn-error.log
 *.tgz
 _site/
+_site/
