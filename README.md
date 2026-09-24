@@ -93,6 +93,7 @@ The CLI accepts a list of arguments:
 | `-u, --ignore-unread`         | Allow writes to variables with implicit any types.                            | false          |
 | `-r, --reporters <list>`      | Which reporters to run: `text`, `html`, `json`, `lcov`, `cobertura`.          | text,html,json |
 | `--config <path>`             | Path to a config file.                                                        | auto-detected  |
+| `--allow-empty`               | Succeed when no files were analysed.                                          | false          |
 | `--respect-gitignore`         | Exclude files that git ignores.                                               | false          |
 | `--compare <path>`            | Exit 3 if any file decreased versus an earlier report.                        | none           |
 | `--history-file <path>`       | Append this run’s totals to a JSON file.                                      | none           |
@@ -178,6 +179,24 @@ Uploading `lcov.info` is what lets Codecov, Coveralls or SonarQube tell you that
   with:
     files: coverage-ts/lcov.info
 ```
+
+### Monorepos and project references
+
+A root `tsconfig.json` that only lists `references` compiles nothing itself, and project references are **not** followed. Running from such a root used to report `100%` over zero files, which silently satisfied any threshold.
+
+It now fails instead:
+
+```
+No files were analysed, so there is nothing to report.
+```
+
+Point `--project` at a package's own tsconfig, and run it once per package:
+
+```shell
+$ typescript-coverage-report --project packages/api/tsconfig.json
+```
+
+Pass `--allow-empty` if an empty result really is expected.
 
 ### Ignoring files git ignores
 

@@ -39,7 +39,24 @@ const options = resolveOptions(
 );
 
 generateCoverageReport(options)
-  .then(({ percentage, comparison }) => {
+  .then(({ percentage, comparison, fileCounts }) => {
+    // A run that analysed nothing reports 100%, which silently satisfies any
+    // threshold. That is how a monorepo root whose tsconfig only lists
+    // `references` appeared to pass while checking nothing at all (#168).
+    if (fileCounts.size === 0 && !options.allowEmpty) {
+      console.error(
+        "\nNo files were analysed, so there is nothing to report.\n\n" +
+          "Common causes:\n" +
+          "  - the tsconfig only lists `references`, which are not followed;\n" +
+          "    point --project at a package's tsconfig instead\n" +
+          "  - --project points at a tsconfig whose `include` matches nothing\n" +
+          "  - every file was excluded by --ignore-files or --respect-gitignore\n\n" +
+          "Pass --allow-empty if an empty result is expected."
+      );
+
+      process.exit(1);
+    }
+
     if (comparison) {
       console.log(formatComparison(comparison));
 

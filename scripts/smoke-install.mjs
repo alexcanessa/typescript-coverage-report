@@ -325,6 +325,35 @@ if (existsSync(coberturaPath)) {
   check(xml.includes("</coverage>"), "cobertura output is not closed");
 }
 
+// --- a run that analysed nothing must fail, not report 100% (#168) --------
+// A monorepo root whose tsconfig only lists `references` compiles nothing,
+// and used to report 100%, silently satisfying any threshold.
+//
+// tsconfig.empty.json has an empty `include`, which empties the program
+// deterministically. Ignoring globs would not: by this point earlier steps
+// have written report directories whose JSON files stay in the program, and
+// whether they do varies by TypeScript version.
+const emptied = run([
+  "--project",
+  "tsconfig.empty.json",
+  "--outputDir",
+  "out-empty",
+  "--threshold",
+  "90"
+]);
+check(emptied === 1, `a run analysing no files exited ${emptied}, expected 1`);
+
+const allowed = run([
+  "--project",
+  "tsconfig.empty.json",
+  "--outputDir",
+  "out-empty-ok",
+  "--threshold",
+  "90",
+  "--allow-empty"
+]);
+check(allowed === 0, `--allow-empty exited ${allowed}, expected 0`);
+
 // --- report drift across the matrix rather than asserting an exact number --
 const summary =
   `| ${process.version} | ts ${tsVersion} | ${packageManager} | ${process.platform} | ` +
