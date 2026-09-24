@@ -1,0 +1,203 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  # `prepare` runs husky on install; there are no git hooks to set up in CI.
+  HUSKY: "0"
+
+jobs:
+  static:
+    name: Lint and typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with: { persist-credentials: false }
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      # --frozen-lockfile is the lockfile-drift gate: it fails when
+      # package.json and pnpm-lock.yaml disagree, which is the state this
+      # repository was in for two years.
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run typecheck
+      - run: pnpm run lint:ci
+      - run: pnpm run format:check
+
+  test:
+    name: Unit tests (node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["22", "24"]
+    steps:
+      - uses: actions/checkout@v7
+        with: { persist-credentials: false }
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run test:ci
+      - uses: actions/upload-artifact@v7
+        if: matrix.node == '24'
+        with:
+          name: coverage-js
+          path: coverage/
+          retention-days: 7
+
+  build:
+    name: Build and self-coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with: { persist-credentials: false }
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      # Dogfooding: the CLI exits 2 below package.json > typeCoverage.atLeast
+      # (90). That threshold has been declared since 2020 and never enforced.
+      - name: Type coverage
+        run: pnpm run type-coverage --outputDir coverage-ts
+      - uses: actions/upload-artifact@v7
+        with:
+          name: coverage-ts
+          path: coverage-ts/
+          retention-days: 7
+
+  package:
+    name: Package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with: { persist-credentials: false }
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Asserts entry points resolve inside the tarball, runtime assets are
+      # present, sources are not, and every require() in dist is a declared
+      # dependency. That last check is what v1.1.1 needed and did not have.
+      - run: pnpm run check:package
+      - run: pnpm pack --pack-destination .
+      - uses: actions/upload-artifact@v7
+        with:
+          name: tarball
+          path: "*.tgz"
+          retention-days: 7
+
+  compat:
+    name: node ${{ matrix.node }} / ts ${{ matrix.typescript }} / ${{ matrix.os }}
+    needs: package
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Oldest Node we declare in engines.
+          - { os: ubuntu-latest, node: "22.12", typescript: "5.9.3" }
+          # Oldest TypeScript we declare in peerDependencies.
+          - { os: ubuntu-latest, node: "24", typescript: "4.9.5" }
+          # The 4.x -> 5.x compiler-API boundary.
+          - { os: ubuntu-latest, node: "24", typescript: "5.0.4" }
+          # What most consumers actually run.
+          - { os: ubuntu-latest, node: "24", typescript: "5.9.3" }
+          # Newest TypeScript that still ships the classic compiler.
+          - { os: ubuntu-latest, node: "26", typescript: "6.0.3" }
+          # The reporter writes files and computes relative asset paths;
+          # Windows has never been tested.
+          - { os: windows-latest, node: "24", typescript: "5.9.3" }
+    steps:
+      - uses: actions/checkout@v7
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: actions/download-artifact@v8
+        with: { name: tarball }
+      - name: Smoke-test the published artifact
+        shell: bash
+        env:
+          TS_VERSION: ${{ matrix.typescript }}
+        run: |
+          TARBALL="$(ls ./*.tgz | head -1)" node scripts/smoke-install.mjs
+
+  compat-next:
+    # Canary, never a gate. TypeScript 7 replaced the classic compiler API:
+    # exports["."] is ./lib/version.cjs, so require("typescript") no longer
+    # returns createProgram or the checker and type-coverage-core fails with
+    # "Cannot read properties of undefined (reading 'Unknown')".
+    # This job turns "does TS 7 work yet?" into a dashboard instead of an issue.
+    name: Canary (typescript@next)
+    needs: package
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@v7
+        with: { node-version: "24" }
+      - uses: actions/download-artifact@v8
+        with: { name: tarball }
+      - name: Smoke-test against TypeScript 7
+        shell: bash
+        continue-on-error: true
+        env:
+          TS_VERSION: "7.0.2"
+          NPM_INSTALL_FLAGS: "--legacy-peer-deps"
+        run: |
+          TARBALL="$(ls ./*.tgz | head -1)" node scripts/smoke-install.mjs \
+            || echo "::warning::typescript@7 is still unsupported (no classic compiler API)"
+
+  dependency-review:
+    name: Dependency review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+        with: { persist-credentials: false }
+      - uses: actions/dependency-review-action@v5
+        with:
+          fail-on-severity: high
+          comment-summary-in-pr: on-failure
+
+  # The only context branch protection should require. Keeping one stable
+  # check name means the matrix above can change without stranding open PRs
+  # on a required check that no longer exists.
+  ci:
+    name: CI
+    if: always()
+    needs: [static, test, build, package, compat]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check upstream job results
+        run: |
+          echo "results: ${{ join(needs.*.result, ', ') }}"
+          if ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}; then
+            echo "::error::one or more CI jobs failed"
+            exit 1
+          fi

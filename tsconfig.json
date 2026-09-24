@@ -14,5 +14,15 @@
     "inlineSourceMap": true,
     "jsx": "react"
   },
-  "exclude": ["**/__tests__/**", "dist", "node_modules"]
+  "exclude": [
+    "**/__tests__/**",
+    "dist",
+    "node_modules",
+    "test",
+    "coverage",
+    "coverage-ts",
+    "docs",
+    "_site"
+  ],
+  "include": ["src"]
 }
