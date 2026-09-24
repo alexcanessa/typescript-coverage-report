@@ -3,6 +3,7 @@ import fs from "node:fs";
 import getCoverage, { Options, CoverageData } from "./getCoverage";
 import { DEFAULT_REPORTERS, ReporterName, runReporters } from "./reporters";
 import { appendHistory } from "./history";
+import { createProgress } from "./progress";
 import { Comparison, compareToBaseline, readBaseline } from "./compare";
 import {
   assertSafeOutputDir,
@@ -56,6 +57,9 @@ export default async function generateCoverageReport(
   // the CLI with 255. See #161 and #140.
   await fs.promises.rm(outputDir, { recursive: true, force: true });
 
+  const progress = createProgress();
+  progress.update("Analysing types...");
+
   const raw = await getCoverage({
     tsProjectFile: options.tsProjectFile,
     strict: options.strict,
@@ -73,11 +77,17 @@ export default async function generateCoverageReport(
   // NOTE: Belt and braces. The ignore glob is an optimisation; it only
   // applies when the directory is inside the project and core matches globs
   // against working-directory-relative paths. This filter is the guarantee.
+  progress.update("Generating report...");
+
   const data = excludeOutputDir(raw, options.outputDir);
 
   const reporters = options.reporters ?? DEFAULT_REPORTERS;
 
   await fs.promises.mkdir(outputDir, { recursive: true });
+
+  // Stop before any reporter writes, so the spinner never collides with the
+  // terminal table or a warning.
+  progress.stop();
 
   await runReporters(reporters, data, {
     outputDir,
