@@ -1,0 +1,12 @@
+# Default owner for everything.
+#
+# Review is auto-requested for visibility. It is deliberately NOT required by
+# the branch ruleset: this is a solo-maintained repository, and GitHub does not
+# let you approve your own pull request, so requiring code-owner review would
+# lock the maintainer out of their own project.
+*                             @alexcanessa
+
+# Extra attention: these are the things that have broken before.
+/package.json                 @alexcanessa
+/.github/workflows/           @alexcanessa
+/scripts/                     @alexcanessa

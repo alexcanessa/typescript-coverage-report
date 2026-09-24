@@ -106,34 +106,11 @@ $ typescript-coverage-report src/one.ts src/two.ts
 
 ## Contributing
 
-Feel free to dive in! [Open an issue](https://github.com/alexcanessa/typescript-coverage-report/issues/new/choose) or submit PRs.
+Feel free to dive in! [Open an issue](https://github.com/alexcanessa/typescript-coverage-report/issues/new/choose) or submit a pull request.
 
-On this project we follow the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/1/3/0/code-of-conduct/).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to get set up, what the checks are, and how commit messages and releases work.
 
-### Developing
-
-Thanks for contributing!
-
-This project uses [pnpm](https://pnpm.io) and requires Node 22.12 or newer.
-
-```bash
-# Install dependencies (this also installs the git hooks).
-$ pnpm install
-# Build the TypeScript files and watch for changes.
-$ pnpm build --watch
-# Link the package globally, so you can test it in other projects.
-$ pnpm link --global
-```
-
-Before opening a pull request, run the same checks CI will run:
-
-```bash
-$ pnpm typecheck && pnpm lint:ci && pnpm test
-```
-
-### Commit messages
-
-This project follows the [Angular commit messages](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit), but it's very open to emojis 🤯.
+This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md).
 
 ### Contributors ✨
 
