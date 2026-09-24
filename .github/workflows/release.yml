@@ -129,3 +129,30 @@ jobs:
             echo "Published typescript-coverage-report@${{ needs.release-please.outputs.version }}"
             echo "https://www.npmjs.com/package/typescript-coverage-report/v/${{ needs.release-please.outputs.version }}"
           } >> "$GITHUB_STEP_SUMMARY"
+
+  notify:
+    name: Tell the issues it shipped
+    needs: [release-please, publish]
+    if: needs.release-please.outputs.released == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Tags are needed to work out what changed since the last release.
+          fetch-depth: 0
+          persist-credentials: false
+
+      # Closing an issue when the fix merges is not the same as it being
+      # usable. On this project the gap between "fixed on main" and
+      # "published" has historically been months, and issues #21 and #28
+      # exist purely because nobody was told.
+      - name: Comment on the issues this release closed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          TAG: ${{ needs.release-please.outputs.tag }}
+        run: node scripts/notify-released-issues.mjs
