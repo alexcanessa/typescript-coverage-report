@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.1.0](https://github.com/alexcanessa/typescript-coverage-report/compare/2.0.0...2.1.0) (2026-09-24)
+
+
+### Features
+
+* fail when a file's coverage decreases ([#199](https://github.com/alexcanessa/typescript-coverage-report/issues/199)) ([5f1b560](https://github.com/alexcanessa/typescript-coverage-report/commit/5f1b5603192b66c1407abf0aaf609e34b0357dfa))
+* optionally exclude files that git ignores ([#204](https://github.com/alexcanessa/typescript-coverage-report/issues/204)) ([6eb7d29](https://github.com/alexcanessa/typescript-coverage-report/commit/6eb7d2966e53625893e1783056205fd3949a3e24))
+* show activity while the type check runs ([#202](https://github.com/alexcanessa/typescript-coverage-report/issues/202)) ([d41815e](https://github.com/alexcanessa/typescript-coverage-report/commit/d41815ead3bbaac0123f66bca69da0f89bfcba43))
+* support a configuration file ([#201](https://github.com/alexcanessa/typescript-coverage-report/issues/201)) ([08b8b5d](https://github.com/alexcanessa/typescript-coverage-report/commit/08b8b5de43ead3c29d3eb90a588353610ee8ae0e))
+
+
+### Bug Fixes
+
+* fail when no files were analysed ([#205](https://github.com/alexcanessa/typescript-coverage-report/issues/205)) ([804d87a](https://github.com/alexcanessa/typescript-coverage-report/commit/804d87a3d70ac42fa942053e5895015031260627))
+
+
+### Documentation
+
+* correct inaccurate claims in the README ([#206](https://github.com/alexcanessa/typescript-coverage-report/issues/206)) ([08c21f1](https://github.com/alexcanessa/typescript-coverage-report/commit/08c21f16a41a82a2144b09af116266cb4ead002f))
+
 ## [2.0.0](https://github.com/alexcanessa/typescript-coverage-report/compare/1.1.1...2.0.0) (2026-09-24)
 
 
