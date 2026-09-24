@@ -1,0 +1,83 @@
+name: Bug report
+description: Something in the report or the CLI is wrong
+title: "fix: "
+# NOTE: deliberately not "help wanted". The old template applied that label
+# automatically, and the release-notes tool excluded it, so every bug filed
+# through the template was silently dropped from the changelog.
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. The two fields that resolve most issues fastest
+        are your **TypeScript version** and your **tsconfig**.
+  - type: input
+    id: version
+    attributes:
+      label: typescript-coverage-report version
+      placeholder: "1.1.1"
+    validations:
+      required: true
+  - type: input
+    id: typescript
+    attributes:
+      label: TypeScript version
+      description: "`npx tsc --version`"
+      placeholder: "5.9.3"
+    validations:
+      required: true
+  - type: input
+    id: node
+    attributes:
+      label: Node version
+      description: "`node --version`"
+      placeholder: "v24.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options: [Linux, macOS, Windows, Other]
+    validations:
+      required: true
+  - type: input
+    id: command
+    attributes:
+      label: Command you ran
+      placeholder: "npx typescript-coverage-report -t 90 -p ./tsconfig.build.json"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead?
+      description: Paste the full output. Re-run with `--debug` if you can.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: tsconfig
+    attributes:
+      label: Your tsconfig.json
+      render: json
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: A link to a repository or a gist. Issues without one may get `needs-repro`.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I am on the latest version, or I checked the changelog
+          required: true
+        - label: I searched existing issues
+          required: true

@@ -1,0 +1,10 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Coverage numbers look wrong
+    url: https://github.com/plantain-00/type-coverage
+    about: >
+      The percentage comes from type-coverage-core. If the CLI runs fine but
+      the number is surprising, it is likely an upstream question.
+  - name: Security vulnerability
+    url: https://github.com/alexcanessa/typescript-coverage-report/security/advisories/new
+    about: Please report privately, not as a public issue.
