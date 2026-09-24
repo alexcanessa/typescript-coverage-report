@@ -1,11 +1,57 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
+# The historical pattern here was weekly, ungrouped pull requests: seven would
+# accumulate, none would be merged, and they would age out and be superseded.
+# Fewer, grouped, capped, and auto-merged when green is the fix.
 version: 2
+
 updates:
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  # Missing entirely until now, which is why the CodeQL workflow sat five
+  # majors behind on actions/checkout.
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "ci"
+    labels: ["dependencies", "github-actions"]
+    groups:
+      github-actions:
+        patterns: ["*"]
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/London"
+    open-pull-requests-limit: 4
+    versioning-strategy: "increase-if-necessary"
+    # Prefixes matter for release-please: a bump to a runtime dependency is a
+    # user-facing change and should produce a patch release, while a dev
+    # dependency must not. The old default, build(deps), was invisible to it.
+    commit-message:
+      prefix: "fix"
+      prefix-development: "chore"
+      include: "scope"
+    labels: ["dependencies"]
+    groups:
+      runtime-minor-patch:
+        applies-to: version-updates
+        dependency-type: "production"
+        update-types: ["minor", "patch"]
+      dev-minor-patch:
+        applies-to: version-updates
+        dependency-type: "development"
+        update-types: ["minor", "patch"]
+      security:
+        applies-to: security-updates
+        patterns: ["*"]
+    ignore:
+      # TypeScript is a peer dependency validated by the compat matrix, not
+      # something to bump blindly; a major move is a deliberate change.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      # @types/node tracks the supported Node floor, not dependency drift.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
