@@ -111,7 +111,19 @@ export const generate = async (
 
     const annotations = data.anys.filter(({ file }) => file === filename);
     const assetsFolder = path.relative(filename, "assets");
-    const sourceCode = await readFile(filename, "utf-8");
+
+    // NOTE: A file listed by the type checker may not be readable by the time
+    // we get here. Degrade to skipping its detail page rather than aborting
+    // the whole run with exit code 255, which is what #140 reported.
+    let sourceCode: string;
+    try {
+      sourceCode = await readFile(filename, "utf-8");
+    } catch (error) {
+      console.warn(
+        `Skipping detail page for ${filename}: ${(error as Error).message}`
+      );
+      continue;
+    }
     const detailContent = wrapHTMLContent(
       generateDetailsPage,
       {
