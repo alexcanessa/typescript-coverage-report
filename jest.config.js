@@ -14,10 +14,10 @@ module.exports = {
   // Seeded from the first green run, floored. Ratchet up, never down.
   coverageThreshold: {
     global: {
-      statements: 84,
-      branches: 80,
-      functions: 87,
-      lines: 84
+      statements: 85,
+      branches: 81,
+      functions: 88,
+      lines: 85
     }
   }
 };

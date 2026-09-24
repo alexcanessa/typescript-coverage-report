@@ -42,6 +42,7 @@ export type CliOptions = {
   ignoreUnread?: boolean;
   reporters?: ReporterName[];
   historyFile?: string;
+  config?: string;
   ignoreNested?: boolean;
   ignoreAsAssertion?: boolean;
   ignoreTypeAssertion?: boolean;
@@ -251,6 +252,10 @@ export const createProgram = ({
       `comma-separated list of reporters to run: ${REPORTER_NAMES.join(", ")} ` +
         `(default: ${DEFAULT_REPORTERS.join(",")})`,
       parseReporters
+    )
+    .option(
+      "--config <path>",
+      "path to a config file (defaults to .typecoveragerc, then the typeCoverage block in package.json)"
     )
     .option(
       "--history-file <path>",

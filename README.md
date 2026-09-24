@@ -92,6 +92,7 @@ The CLI accepts a list of arguments:
 | `--ignore-catch`              | Ignore type `any` for (try-)catch clause variables.                           | false          |
 | `-u, --ignore-unread`         | Allow writes to variables with implicit any types.                            | false          |
 | `-r, --reporters <list>`      | Which reporters to run: `text`, `html`, `json`, `lcov`, `cobertura`.          | text,html,json |
+| `--config <path>`             | Path to a config file.                                                        | auto-detected  |
 | `--compare <path>`            | Exit 3 if any file decreased versus an earlier report.                        | none           |
 | `--history-file <path>`       | Append this run’s totals to a JSON file.                                      | none           |
 | `--ignore-nested`             | Ignore nested anys, such as `Promise<any>`.                                   | false          |
@@ -108,6 +109,32 @@ Any trailing arguments are treated as the only files to check, which is useful w
 ```shell
 $ typescript-coverage-report src/one.ts src/two.ts
 ```
+
+### Configuration file
+
+Options can live in a config file instead of being repeated on the command line. Any of these is picked up automatically, in order:
+
+```
+.typecoveragerc
+.typecoveragerc.json
+typescript-coverage-report.config.json
+```
+
+```json
+{
+  "atLeast": 90,
+  "outputDir": "coverage-ts",
+  "reporters": ["text", "html", "lcov"],
+  "ignoreFiles": ["vendor/**", "generated/**"],
+  "strict": true
+}
+```
+
+Or point at one explicitly with `--config ./config/coverage.json`.
+
+The `typeCoverage` block in `package.json` still works and is unchanged. A dedicated config file takes precedence over it, and only the first file found is used — they are not merged, so it is never ambiguous where a setting came from.
+
+Precedence is **defaults → config file → command line flags**, so a flag always wins.
 
 ## Using it in CI
 
