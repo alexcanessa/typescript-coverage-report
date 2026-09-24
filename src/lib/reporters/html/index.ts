@@ -41,6 +41,8 @@ const includeAssets = (assets: readonly string[]): string =>
   assets.map(includeAsset).join("\n");
 
 const wrapHTMLContent = (
+  // TODO: replace this untyped seam with a typed layout() helper.
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   renderFn: Function,
   props?: Record<string, any>,
   options:

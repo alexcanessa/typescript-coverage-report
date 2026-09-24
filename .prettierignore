@@ -1,0 +1,10 @@
+dist
+coverage
+coverage-ts
+docs
+_site
+pnpm-lock.yaml
+CHANGELOG.md
+
+# Rewritten by the all-contributors bot; reformatting it only creates churn.
+.all-contributorsrc

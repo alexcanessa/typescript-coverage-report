@@ -1,10 +1,9 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: 'Bug:'
+title: "Bug:"
 labels: help wanted
-assignees: ''
-
+assignees: ""
 ---
 
 **Describe the bug**
@@ -20,10 +19,11 @@ A clear and concise description of what you expected to happen.
 If it regards the HTML report, you might want to take a few screenshots.
 
 **Environment**
- - Tool version: 
- - OS:
- - Node version:
- - Browser (if applicable): [e.g. chrome, safari]
+
+- Tool version:
+- OS:
+- Node version:
+- Browser (if applicable): [e.g. chrome, safari]
 
 **Additional context**
 Add any other context about the problem here.

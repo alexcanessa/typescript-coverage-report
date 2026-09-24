@@ -20,7 +20,7 @@ describe("getCoverage function", () => {
     });
 
     expect(data).toMatchSnapshot();
-    // @ts-expect-error
+    // @ts-expect-error -- lint is reassigned to a jest mock above
     expect(typeCoverageCore.lint.mock.calls).toMatchSnapshot();
   });
 
@@ -29,7 +29,7 @@ describe("getCoverage function", () => {
 
     await getCoverage();
 
-    // @ts-expect-error
+    // @ts-expect-error -- lint is reassigned to a jest mock above
     expect(typeCoverageCore.lint.mock.calls).toMatchSnapshot();
   });
 });
