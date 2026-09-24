@@ -1,0 +1,75 @@
+name: Release drift
+
+# "Maintainer publishes late" is a documented six-year pattern here: issues
+# #21 and #28 both exist because a merged fix sat unreleased. release-please
+# still needs a human to merge the release pull request, so this makes
+# lateness loud instead of silent.
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    name: Check for unreleased changes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - id: drift
+        shell: bash
+        run: |
+          set -euo pipefail
+          LOCAL=$(node -p "require('./package.json').version")
+          REMOTE=$(npm view typescript-coverage-report version 2>/dev/null || echo "$LOCAL")
+          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [ -n "$TAG" ]; then
+            COUNT=$(git log "$TAG"..HEAD --oneline -E --grep='^(feat|fix|perf)' | wc -l | tr -d ' ')
+            AGE=$(( ( $(date +%s) - $(git log -1 --format=%ct "$TAG") ) / 86400 ))
+          else
+            COUNT=$(git log --oneline -E --grep='^(feat|fix|perf)' | wc -l | tr -d ' ')
+            AGE=999
+          fi
+
+          {
+            echo "local=$LOCAL"
+            echo "remote=$REMOTE"
+            echo "tag=${TAG:-none}"
+            echo "count=$COUNT"
+            echo "age=$AGE"
+          } >> "$GITHUB_OUTPUT"
+
+          if [ "$LOCAL" != "$REMOTE" ] || { [ "$COUNT" -gt 0 ] && [ "$AGE" -gt 21 ]; }; then
+            echo "drift=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "drift=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.drift.outputs.drift == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          TITLE="chore: unreleased changes on main"
+          EXISTING=$(gh issue list --repo "$REPO" --state open --label release \
+            --search "$TITLE in:title" --json number --jq '.[0].number // empty')
+          BODY=$(printf 'main has **%s** releasable commits, %s days since `%s`.\n\nnpm: `%s` · package.json: `%s`\n\nMerge the open release pull request to ship.' \
+            "${{ steps.drift.outputs.count }}" "${{ steps.drift.outputs.age }}" \
+            "${{ steps.drift.outputs.tag }}" "${{ steps.drift.outputs.remote }}" \
+            "${{ steps.drift.outputs.local }}")
+
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --repo "$REPO" --body "$BODY"
+          else
+            gh issue create --repo "$REPO" --title "$TITLE" --label release --body "$BODY"
+          fi

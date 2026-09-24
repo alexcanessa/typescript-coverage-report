@@ -86,6 +86,22 @@ conventional commits on `main` and keeps a release pull request open. Merging
 it tags the release and publishes to npm from CI. If your change is
 user-facing, `feat:` or `fix:` is what makes it ship.
 
+### Maintainer setup
+
+Two things are configured outside the repository and are not yet done:
+
+1. **npm trusted publishing.** On npmjs.com, add a trusted publisher for this
+   repository with workflow `release.yml` and environment `npm`. Until then
+   the publish step will fail. Once it works, require trusted publishing on the
+   package and revoke any legacy automation tokens: that is what makes
+   publishing from a laptop impossible rather than merely discouraged.
+2. **A GitHub App token for release-please.** It currently runs with the
+   default `GITHUB_TOKEN`, and pull requests created with that token do not
+   trigger workflows -- so the release pull request does not run CI. This must
+   be swapped for a GitHub App token **before** required status checks are
+   enabled on `main`, or the release pull request can never satisfy them and
+   releases deadlock.
+
 ## Tests
 
 Snapshots live next to the tests that create them. If a change to the report

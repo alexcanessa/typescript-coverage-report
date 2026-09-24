@@ -1,0 +1,102 @@
+name: Release
+
+# Replaces github-release-notes (gren), which was unmaintained and read its
+# notes from milestones -- of which only one, "1.0.0", ever existed. Combined
+# with the bug report template auto-applying a label gren excluded, that is
+# why GitHub Releases stopped at 1.0.0 while npm went on to 1.1.1.
+#
+# release-please reads the conventional commits on main and keeps a release
+# pull request open. Merging it tags the release and publishes from CI, so a
+# tarball can no longer be built from whatever happens to be on a laptop --
+# which is exactly how the broken 1.1.0 and 1.1.1 were published.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+env:
+  HUSKY: "0"
+
+jobs:
+  release-please:
+    name: Release pull request
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    outputs:
+      released: ${{ steps.release.outputs.release_created }}
+      tag: ${{ steps.release.outputs.tag_name }}
+      version: ${{ steps.release.outputs.version }}
+    steps:
+      # NOTE: This uses the default GITHUB_TOKEN. Pull requests it creates do
+      # not trigger workflows, so the release pull request will not run CI.
+      # That is tolerable while main is unprotected, but it MUST be swapped
+      # for a GitHub App token before required status checks are turned on,
+      # or the release pull request can never satisfy them and the release
+      # process deadlocks. See CONTRIBUTING.md.
+      - uses: googleapis/release-please-action@v5
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  publish:
+    name: Publish to npm
+    needs: release-please
+    if: needs.release-please.outputs.released == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/typescript-coverage-report
+    permissions:
+      contents: read
+      id-token: write # npm trusted publishing (OIDC)
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.release-please.outputs.tag }}
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+
+      # The same gate CI runs, plus: the built artefact must match the tag.
+      - name: Assert the tarball is publishable
+        env:
+          EXPECT_VERSION: ${{ needs.release-please.outputs.version }}
+        run: pnpm run check:package
+
+      - name: Smoke-test the artefact before publishing
+        env:
+          TS_VERSION: "5.9.3"
+        run: pnpm run e2e
+
+      # No NPM_TOKEN: trusted publishing issues a short-lived credential and
+      # attaches provenance automatically. Requires the trusted publisher to
+      # be configured on npmjs.com for this repository and workflow.
+      - name: Publish
+        run: npm publish
+
+      - name: Summary
+        run: |
+          {
+            echo "Published typescript-coverage-report@${{ needs.release-please.outputs.version }}"
+            echo "https://www.npmjs.com/package/typescript-coverage-report/v/${{ needs.release-please.outputs.version }}"
+          } >> "$GITHUB_STEP_SUMMARY"
