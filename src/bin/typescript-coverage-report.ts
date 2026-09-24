@@ -1,36 +1,29 @@
 #!/usr/bin/env node
 
-import path from "node:path";
 import { IPackageJson } from "package-json-type";
 import generateCoverageReport from "../lib";
 import { formatComparison } from "../lib/compare";
-import {
-  CliOptions,
-  TypeCoverageConfig,
-  createProgram,
-  resolveOptions
-} from "./options";
+import { CliOptions, createProgram, resolveOptions } from "./options";
+import { loadConfig } from "./config";
 
 const { version, description }: IPackageJson = require("../../package.json");
 
-/**
- * Read the consumer's package.json for a `typeCoverage` block.
- *
- * Guarded because this used to run unconditionally at module scope: in a
- * directory without a package.json the CLI died with MODULE_NOT_FOUND before
- * commander could so much as print --help.
- */
-const readTypeCoverageConfig = (): TypeCoverageConfig => {
-  try {
-    const pkg: IPackageJson & { typeCoverage?: TypeCoverageConfig } = require(
-      path.join(process.cwd(), "package.json")
-    );
+// NOTE: Read --config before commander parses, because the config supplies
+// the defaults commander would otherwise be describing in --help.
+const configPath = process.argv.includes("--config")
+  ? process.argv[process.argv.indexOf("--config") + 1]
+  : undefined;
 
-    return pkg.typeCoverage ?? {};
-  } catch {
-    return {};
-  }
-};
+let config;
+
+try {
+  config = loadConfig(process.cwd(), configPath);
+} catch (error) {
+  // A bad config is a usage mistake, so report it the way commander reports
+  // one rather than dumping a stack trace at the user.
+  console.error(`error: ${(error as Error).message}`);
+  process.exit(1);
+}
 
 const program = createProgram({
   version: version ?? "",
@@ -41,7 +34,7 @@ program.parse();
 
 const options = resolveOptions(
   program.opts<CliOptions>(),
-  readTypeCoverageConfig(),
+  config,
   program.args
 );
 
