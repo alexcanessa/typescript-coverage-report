@@ -106,8 +106,8 @@ Two things are configured outside the repository and are not yet done:
 2. ~~A GitHub App token for release-please.~~ **Done.** release-please runs as
    a GitHub App rather than with the default `GITHUB_TOKEN`, whose events
    GitHub suppresses -- the symptom here was runs on the release pull request
-   parking at `action_required` and never executing. The App ID lives in the
-   `RELEASE_APP_ID` variable and its key in the `RELEASE_APP_PRIVATE_KEY`
+   parking at `action_required` and never executing. The App Client ID lives in the
+   `RELEASE_CLIENT_ID` variable and its key in the `RELEASE_APP_PRIVATE_KEY`
    secret. If releases ever stop opening, check the App installation first.
 
 ## Tests
