@@ -17,19 +17,13 @@ type TypeCoverageConfig = {
   ignoreUnread?: boolean;
 };
 
-const {
-  version,
-  description
-}: // eslint-disable-next-line @typescript-eslint/no-var-requires
-IPackageJson = require("../../package.json");
+const { version, description }: IPackageJson = require("../../package.json");
 
 const {
   typeCoverage = {}
-}: // eslint-disable-next-line @typescript-eslint/no-var-requires
-IPackageJson & { typeCoverage?: TypeCoverageConfig } = require(path.join(
-  process.cwd(),
-  "/package.json"
-));
+}: IPackageJson & { typeCoverage?: TypeCoverageConfig } = require(
+  path.join(process.cwd(), "/package.json")
+);
 
 const argvWithVersion = (argvs: string[]): string[] => {
   const vPos = argvs.indexOf("-v");

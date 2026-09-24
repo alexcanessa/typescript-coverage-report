@@ -4,9 +4,9 @@
 [![npm downloads](https://img.shields.io/npm/dw/typescript-coverage-report.svg)](https://www.npmjs.com/package/typescript-coverage-report)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
-[![Automated Release Notes by gren](https://img.shields.io/badge/%F0%9F%A4%96-release%20notes-00B2EE.svg)](https://github-tools.github.io/github-release-notes/)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-18-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
@@ -105,13 +105,21 @@ On this project we follow the [Contributor Covenant Code of Conduct](https://www
 
 Thanks for contributing!
 
-Remember to run the following commands to link your version of this package and build the TypeScript files.
+This project uses [pnpm](https://pnpm.io) and requires Node 22.12 or newer.
 
 ```bash
-# Link the package globally, so you'll be able to test it in other projects.
-$ yarn link
-# Builds the TypeScript files and watches for changes
-$ yarn build --watch
+# Install dependencies (this also installs the git hooks).
+$ pnpm install
+# Build the TypeScript files and watch for changes.
+$ pnpm build --watch
+# Link the package globally, so you can test it in other projects.
+$ pnpm link --global
+```
+
+Before opening a pull request, run the same checks CI will run:
+
+```bash
+$ pnpm typecheck && pnpm lint:ci && pnpm test
 ```
 
 ### Commit messages

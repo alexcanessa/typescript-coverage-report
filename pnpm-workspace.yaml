@@ -1,0 +1,9 @@
+# pnpm settings live here rather than in the "pnpm" key of package.json,
+# which newer pnpm no longer reads.
+#
+# @parcel/watcher and unrs-resolver are transitive dev dependencies of
+# eslint/lint-staged. Both ship prebuilt native binaries, so their install
+# scripts are only a source-build fallback and are safe to allow.
+onlyBuiltDependencies:
+  - "@parcel/watcher"
+  - unrs-resolver
