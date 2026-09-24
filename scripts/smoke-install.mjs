@@ -9,6 +9,11 @@
  *
  * Env:
  *   TS_VERSION          TypeScript to install alongside (default 5.9.3)
+ *   PACKAGE_MANAGER     npm (default) or pnpm. npm is the default because it
+ *                       is what most consumers use; the pnpm leg exists
+ *                       because its strict node_modules layout fails loudly
+ *                       on an undeclared dependency, which is exactly the
+ *                       class of bug that shipped in 1.1.0 and 1.1.1.
  *   NPM_INSTALL_FLAGS   extra npm flags, e.g. --legacy-peer-deps
  *   TARBALL             explicit tarball path (default: pack one)
  */
@@ -57,22 +62,37 @@ if (!tarball) {
 const project = path.join(staging, "project");
 cpSync(path.join(root, "test/fixture"), project, { recursive: true });
 
-const npm = (...args) =>
-  execFileSync("npm", args, {
+const packageManager = process.env.PACKAGE_MANAGER ?? "npm";
+
+const install = () => {
+  const args =
+    packageManager === "pnpm"
+      ? [
+          "install",
+          path.resolve(tarball),
+          `typescript@${tsVersion}`,
+          "--prod",
+          "--ignore-workspace",
+          ...extraFlags
+        ]
+      : [
+          "install",
+          path.resolve(tarball),
+          `typescript@${tsVersion}`,
+          "--omit=dev",
+          "--no-audit",
+          "--no-fund",
+          ...extraFlags
+        ];
+
+  execFileSync(packageManager, args, {
     cwd: project,
     stdio: "inherit",
     shell: isWindows
   });
+};
 
-npm(
-  "install",
-  path.resolve(tarball),
-  `typescript@${tsVersion}`,
-  "--omit=dev",
-  "--no-audit",
-  "--no-fund",
-  ...extraFlags
-);
+install();
 
 // The 1.1.x failure mode: the published dist required these but never
 // declared them, so they were absent unless a consumer happened to have them.
@@ -233,7 +253,7 @@ if (existsSync(ignoredJson)) {
 
 // --- report drift across the matrix rather than asserting an exact number --
 const summary =
-  `| ${process.version} | ts ${tsVersion} | ${process.platform} | ` +
+  `| ${process.version} | ts ${tsVersion} | ${packageManager} | ${process.platform} | ` +
   `${Number(data.percentage ?? 0).toFixed(2)}% | ${data.anys?.length ?? "?"} anys |`;
 console.log(summary);
 if (process.env.GITHUB_STEP_SUMMARY) {
