@@ -1,9 +1,8 @@
 import path from "node:path";
 import fs from "node:fs";
 import getCoverage, { Options, CoverageData } from "./getCoverage";
-import { generate as generateText } from "./reporters/text";
-import { generate as generateHTML } from "./reporters/html";
-import { generate as generateJSON } from "./reporters/json";
+import { DEFAULT_REPORTERS, ReporterName, runReporters } from "./reporters";
+import { appendHistory } from "./history";
 import {
   assertSafeOutputDir,
   excludeOutputDir,
@@ -13,6 +12,9 @@ import {
 export type ProgramOptions = Options & {
   outputDir: string;
   threshold: number;
+  reporters?: readonly ReporterName[];
+  generatedAt?: Date;
+  historyFile?: string;
 };
 
 const withOutputDirIgnored = (
@@ -67,23 +69,30 @@ export default async function generateCoverageReport(
   // against working-directory-relative paths. This filter is the guarantee.
   const data = excludeOutputDir(raw, options.outputDir);
 
-  console.log(generateText(data, options.threshold));
+  const reporters = options.reporters ?? DEFAULT_REPORTERS;
 
   await fs.promises.mkdir(outputDir, { recursive: true });
 
-  const reporterOptions = { ...options, outputDir };
+  await runReporters(reporters, data, {
+    outputDir,
+    threshold: options.threshold,
+    generatedAt: options.generatedAt
+  });
 
-  await generateHTML(data, reporterOptions);
+  // NOTE: Only the HTML report links these. fs.cp replaces the ncp
+  // dependency, last touched in 2016; it is stable from Node 22.3, below the
+  // 22.12 engines floor.
+  if (reporters.includes("html")) {
+    await fs.promises.cp(
+      path.join(__dirname, "../../assets"),
+      path.join(outputDir, "assets"),
+      { recursive: true }
+    );
+  }
 
-  // NOTE: fs.cp replaces the ncp dependency, which was last touched in 2016.
-  // It is stable from Node 22.3, below the 22.12 engines floor.
-  await fs.promises.cp(
-    path.join(__dirname, "../../assets"),
-    path.join(outputDir, "assets"),
-    { recursive: true }
-  );
-
-  await generateJSON(data, reporterOptions);
+  if (options.historyFile) {
+    await appendHistory(data, options.historyFile, options.generatedAt);
+  }
 
   return data;
 }

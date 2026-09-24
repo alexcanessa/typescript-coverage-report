@@ -80,24 +80,100 @@ As an alternative, options may be provided through the `type-coverage` [configur
 
 The CLI accepts a list of arguments:
 
-| Option                      | Description                                                                   | Default value |
-| --------------------------- | ----------------------------------------------------------------------------- | ------------- |
-| `-t, --threshold <number>`  | The minimum percentage of coverage required.                                  | 80            |
-| `-o, --outputDir <path>`    | The output directory where to generate the report.                            | coverage-ts   |
-| `-s, --strict`              | Run the check in strict mode.                                                 | false         |
-| `-d, --debug`               | Show debug information.                                                       | false         |
-| `-c, --cache`               | Save and reuse type check result from cache.                                  | false         |
-| `-p, --project <path>`      | File path to the tsconfig file, eg: `--project "./app/tsconfig.app.json"`     | .             |
-| `-i, --ignore-files <glob>` | Ignore files matching a glob. Repeatable: `-i "demo1/*.ts" -i "demo2/foo.ts"` | none          |
-| `--ignore-catch`            | Ignore type `any` for (try-)catch clause variables.                           | false         |
-| `-u, --ignore-unread`       | Allow writes to variables with implicit any types.                            | false         |
-| `-v, --version`             | Print the version.                                                            |               |
-| `-h, --help`                | Print the usage information.                                                  |               |
+| Option                        | Description                                                                   | Default value  |
+| ----------------------------- | ----------------------------------------------------------------------------- | -------------- |
+| `-t, --threshold <number>`    | The minimum percentage of coverage required.                                  | 80             |
+| `-o, --outputDir <path>`      | The output directory where to generate the report.                            | coverage-ts    |
+| `-s, --strict`                | Run the check in strict mode.                                                 | false          |
+| `-d, --debug`                 | Show debug information.                                                       | false          |
+| `-c, --cache`                 | Save and reuse type check result from cache.                                  | false          |
+| `-p, --project <path>`        | File path to the tsconfig file, eg: `--project "./app/tsconfig.app.json"`     | .              |
+| `-i, --ignore-files <glob>`   | Ignore files matching a glob. Repeatable: `-i "demo1/*.ts" -i "demo2/foo.ts"` | none           |
+| `--ignore-catch`              | Ignore type `any` for (try-)catch clause variables.                           | false          |
+| `-u, --ignore-unread`         | Allow writes to variables with implicit any types.                            | false          |
+| `-r, --reporters <list>`      | Which reporters to run: `text`, `html`, `json`, `lcov`, `cobertura`.          | text,html,json |
+| `--history-file <path>`       | Append this run’s totals to a JSON file.                                      | none           |
+| `--ignore-nested`             | Ignore nested anys, such as `Promise<any>`.                                   | false          |
+| `--ignore-as-assertion`       | Ignore assertions such as `foo as string`.                                    | false          |
+| `--ignore-type-assertion`     | Ignore assertions such as `<string>foo`.                                      | false          |
+| `--ignore-non-null-assertion` | Ignore non-null assertions such as `foo!`.                                    | false          |
+| `--ignore-object`             | Ignore the `Object` type.                                                     | false          |
+| `--ignore-empty-type`         | Ignore the empty type `{}`.                                                   | false          |
+| `-v, --version`               | Print the version.                                                            |                |
+| `-h, --help`                  | Print the usage information.                                                  |                |
 
 Any trailing arguments are treated as the only files to check, which is useful with tools like `lint-staged`:
 
 ```shell
 $ typescript-coverage-report src/one.ts src/two.ts
+```
+
+## Using it in CI
+
+The CLI exits `2` when coverage is below the threshold, so gating a build needs nothing more than running it:
+
+```yaml
+- run: npx typescript-coverage-report --threshold 90
+```
+
+For CI systems that render coverage themselves, pick the reporters you want with `--reporters`. Running only the artifact you need also skips the terminal table, which on a large project takes a while to print:
+
+```shell
+# Codecov, Coveralls, SonarQube, GitHub annotations
+$ typescript-coverage-report --reporters lcov --threshold 90
+
+# Azure Pipelines, Jenkins, GitLab
+$ typescript-coverage-report --reporters cobertura --threshold 90
+
+# everything, including the browsable HTML report
+$ typescript-coverage-report --reporters text,html,json,lcov,cobertura
+```
+
+| Reporter    | Output                           | Read by                                |
+| ----------- | -------------------------------- | -------------------------------------- |
+| `text`      | the terminal table               | humans                                 |
+| `html`      | `index.html` and a page per file | humans                                 |
+| `json`      | `typescript-coverage.json`       | scripts                                |
+| `lcov`      | `lcov.info`                      | Codecov, Coveralls, SonarQube, genhtml |
+| `cobertura` | `cobertura-coverage.xml`         | Azure Pipelines, Jenkins, GitLab       |
+
+The default stays `text,html,json`, so upgrading changes nothing unless you ask it to.
+
+### Per-file coverage deltas
+
+Uploading `lcov.info` is what lets Codecov, Coveralls or SonarQube tell you that a pull request lowered coverage **on a particular file** — this tool does not need to know anything about git for that to work:
+
+```yaml
+- run: npx typescript-coverage-report --reporters lcov --threshold 90
+- uses: codecov/codecov-action@v5
+  with:
+    files: coverage-ts/lcov.info
+```
+
+### How line coverage is derived
+
+Type coverage counts **identifiers**, but `lcov` and Cobertura are line-based. A line is reported as covered when it contains no uncovered identifier, and uncovered when it contains at least one — the same projection [`flow-coverage-report`](https://github.com/rpl/flow-coverage-report) uses. Blank and comment-only lines are left out of the denominator.
+
+This means the line rate in those artifacts is not identical to the identifier percentage in the terminal table. The identifier-level numbers are the authoritative ones, and they are what the exit code and `typescript-coverage.json` use.
+
+### Tracking coverage over time
+
+`--history-file` appends each run's totals to a JSON array, which is useful for charting a trend or for a simple "did it go down" check:
+
+```shell
+$ typescript-coverage-report --history-file coverage-history.json
+```
+
+```json
+[
+  {
+    "timestamp": "2026-09-24T13:26:31.915Z",
+    "percentage": 76.1905,
+    "total": 21,
+    "covered": 16,
+    "uncovered": 5
+  }
+]
 ```
 
 ## Migrating to 2.0

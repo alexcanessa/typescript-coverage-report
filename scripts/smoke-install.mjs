@@ -251,6 +251,80 @@ if (existsSync(ignoredJson)) {
   );
 }
 
+// --- the CI artefacts are produced and are well formed --------------------
+// These are the whole point of the tool in CI: an exit code gates the build,
+// and lcov/cobertura let the CI system render and diff it.
+const artefacts = run([
+  "--outputDir",
+  "out-ci",
+  "--threshold",
+  "0",
+  "--reporters",
+  "lcov,cobertura,json",
+  "--history-file",
+  "history.json"
+]);
+check(artefacts === 0, `artefact run exited ${artefacts}`);
+
+for (const file of [
+  "out-ci/lcov.info",
+  "out-ci/cobertura-coverage.xml",
+  "out-ci/typescript-coverage.json",
+  "history.json"
+]) {
+  check(existsSync(path.join(project, file)), `missing artefact: ${file}`);
+}
+
+// Selecting reporters must actually skip the others.
+check(
+  !existsSync(path.join(project, "out-ci/index.html")),
+  "--reporters lcov,cobertura,json still produced the HTML report"
+);
+
+const lcovPath = path.join(project, "out-ci/lcov.info");
+if (existsSync(lcovPath)) {
+  const lcov = readFileSync(lcovPath, "utf8");
+
+  check(
+    lcov.includes("SF:src/index.ts"),
+    "lcov is missing the fixture source file"
+  );
+  check(lcov.includes("end_of_record"), "lcov record is not terminated");
+
+  // genhtml and Codecov both reject a file whose LF/LH disagree with its DA
+  // records, so assert the invariant rather than a golden string.
+  for (const record of lcov
+    .split("end_of_record")
+    .filter((r) => r.includes("SF:"))) {
+    const da = record.match(/^DA:/gm) ?? [];
+    const hits = record.match(/^DA:\d+,[1-9]/gm) ?? [];
+    const found = /^LF:(\d+)$/m.exec(record);
+    const hit = /^LH:(\d+)$/m.exec(record);
+    const file = /^SF:(.+)$/m.exec(record)?.[1] ?? "?";
+
+    check(
+      found !== null && Number(found[1]) === da.length,
+      `lcov LF does not match the DA record count for ${file}`
+    );
+    check(
+      hit !== null && Number(hit[1]) === hits.length,
+      `lcov LH does not match the hit DA records for ${file}`
+    );
+  }
+}
+
+const coberturaPath = path.join(project, "out-ci/cobertura-coverage.xml");
+if (existsSync(coberturaPath)) {
+  const xml = readFileSync(coberturaPath, "utf8");
+
+  check(
+    xml.startsWith("<?xml"),
+    "cobertura output is missing its XML declaration"
+  );
+  check(/line-rate="[\d.]+"/.test(xml), "cobertura output has no line-rate");
+  check(xml.includes("</coverage>"), "cobertura output is not closed");
+}
+
 // --- report drift across the matrix rather than asserting an exact number --
 const summary =
   `| ${process.version} | ts ${tsVersion} | ${packageManager} | ${process.platform} | ` +

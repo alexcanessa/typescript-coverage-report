@@ -1,4 +1,10 @@
 import { Command, InvalidArgumentError } from "commander";
+import {
+  DEFAULT_REPORTERS,
+  REPORTER_NAMES,
+  ReporterName,
+  isReporterName
+} from "../lib/reporters";
 
 /** The `typeCoverage` block a consumer may put in their package.json. */
 export type TypeCoverageConfig = {
@@ -12,6 +18,14 @@ export type TypeCoverageConfig = {
   ignoreFiles?: boolean | string | string[];
   ignoreCatch?: boolean;
   ignoreUnread?: boolean;
+  reporters?: string[];
+  historyFile?: string;
+  ignoreNested?: boolean;
+  ignoreAsAssertion?: boolean;
+  ignoreTypeAssertion?: boolean;
+  ignoreNonNullAssertion?: boolean;
+  ignoreObject?: boolean;
+  ignoreEmptyType?: boolean;
 };
 
 /** Exactly the flags the user typed; everything is optional. */
@@ -25,6 +39,14 @@ export type CliOptions = {
   ignoreFiles?: string[];
   ignoreCatch?: boolean;
   ignoreUnread?: boolean;
+  reporters?: ReporterName[];
+  historyFile?: string;
+  ignoreNested?: boolean;
+  ignoreAsAssertion?: boolean;
+  ignoreTypeAssertion?: boolean;
+  ignoreNonNullAssertion?: boolean;
+  ignoreObject?: boolean;
+  ignoreEmptyType?: boolean;
 };
 
 export type ResolvedOptions = {
@@ -38,6 +60,14 @@ export type ResolvedOptions = {
   ignoreCatch: boolean;
   ignoreUnread: boolean;
   files?: string[];
+  reporters: ReporterName[];
+  historyFile?: string;
+  ignoreNested: boolean;
+  ignoreAsAssertion: boolean;
+  ignoreTypeAssertion: boolean;
+  ignoreNonNullAssertion: boolean;
+  ignoreObject: boolean;
+  ignoreEmptyType: boolean;
 };
 
 export const DEFAULTS = {
@@ -86,6 +116,37 @@ export const normalizeIgnoreFiles = (value: unknown): string[] | undefined => {
 };
 
 /**
+ * Parse a comma-separated reporter list, rejecting unknown names up front.
+ *
+ * Failing here rather than silently ignoring a typo matters: a CI job
+ * asking for "lcov" and getting nothing would look like the tool produced
+ * no artefact, which is the failure this option exists to prevent.
+ */
+export const parseReporters = (value: string): ReporterName[] => {
+  const names = value
+    .split(",")
+    .map((name) => name.trim())
+    .filter((name) => name !== "");
+
+  if (names.length === 0) {
+    throw new InvalidArgumentError(
+      `Expected at least one of: ${REPORTER_NAMES.join(", ")}.`
+    );
+  }
+
+  const unknown = names.filter((name) => !isReporterName(name));
+
+  if (unknown.length > 0) {
+    throw new InvalidArgumentError(
+      `Unknown reporter${unknown.length > 1 ? "s" : ""} ` +
+        `${unknown.join(", ")}. Available: ${REPORTER_NAMES.join(", ")}.`
+    );
+  }
+
+  return [...new Set(names as ReporterName[])];
+};
+
+/**
  * `--threshold abc` used to produce NaN, and `percentage < NaN` is false, so
  * the run passed silently however bad the coverage was.
  */
@@ -128,7 +189,22 @@ export const resolveOptions = (
   ignoreCatch: cli.ignoreCatch ?? config.ignoreCatch ?? DEFAULTS.ignoreCatch,
   ignoreUnread:
     cli.ignoreUnread ?? config.ignoreUnread ?? DEFAULTS.ignoreUnread,
-  files: files.length > 0 ? files : undefined
+  files: files.length > 0 ? files : undefined,
+  reporters:
+    cli.reporters ??
+    (config.reporters
+      ? parseReporters(config.reporters.join(","))
+      : undefined) ??
+    DEFAULT_REPORTERS,
+  historyFile: cli.historyFile ?? config.historyFile,
+  ignoreNested: cli.ignoreNested ?? config.ignoreNested ?? false,
+  ignoreAsAssertion: cli.ignoreAsAssertion ?? config.ignoreAsAssertion ?? false,
+  ignoreTypeAssertion:
+    cli.ignoreTypeAssertion ?? config.ignoreTypeAssertion ?? false,
+  ignoreNonNullAssertion:
+    cli.ignoreNonNullAssertion ?? config.ignoreNonNullAssertion ?? false,
+  ignoreObject: cli.ignoreObject ?? config.ignoreObject ?? false,
+  ignoreEmptyType: cli.ignoreEmptyType ?? config.ignoreEmptyType ?? false
 });
 
 /**
@@ -167,6 +243,16 @@ export const createProgram = ({
       collect
     )
     .option(
+      "-r, --reporters <list>",
+      `comma-separated list of reporters to run: ${REPORTER_NAMES.join(", ")} ` +
+        `(default: ${DEFAULT_REPORTERS.join(",")})`,
+      parseReporters
+    )
+    .option(
+      "--history-file <path>",
+      "append this run's totals to a JSON file, for tracking coverage over time"
+    )
+    .option(
       "--ignore-catch",
       "ignore type any for (try-)catch clause variables"
     )
@@ -174,6 +260,15 @@ export const createProgram = ({
       "-u, --ignore-unread",
       "allow writes to variables with implicit any types"
     )
+    .option("--ignore-nested", "ignore nested anys, such as Promise<any>")
+    .option("--ignore-as-assertion", "ignore assertions such as foo as string")
+    .option("--ignore-type-assertion", "ignore assertions such as <string>foo")
+    .option(
+      "--ignore-non-null-assertion",
+      "ignore non-null assertions such as foo!"
+    )
+    .option("--ignore-object", "ignore the Object type")
+    .option("--ignore-empty-type", "ignore the empty type {}")
     .argument(
       "[files...]",
       "only check these files, useful with tools like lint-staged"

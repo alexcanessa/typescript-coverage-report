@@ -22,7 +22,17 @@ export type CoverageData = {
 export type Options = Partial<
   Pick<
     LintOptions,
-    "strict" | "debug" | "ignoreFiles" | "ignoreCatch" | "files"
+    | "strict"
+    | "debug"
+    | "ignoreFiles"
+    | "ignoreCatch"
+    | "files"
+    | "ignoreNested"
+    | "ignoreAsAssertion"
+    | "ignoreTypeAssertion"
+    | "ignoreNonNullAssertion"
+    | "ignoreObject"
+    | "ignoreEmptyType"
   > & {
     cache: LintOptions["enableCache"];
     ignoreUnread: LintOptions["ignoreUnreadAnys"];
@@ -39,7 +49,13 @@ const getCoverage = async (options?: Options): Promise<CoverageData> => {
     ignoreCatch,
     cache: enableCache,
     ignoreUnread: ignoreUnreadAnys,
-    files
+    files,
+    ignoreNested,
+    ignoreAsAssertion,
+    ignoreTypeAssertion,
+    ignoreNonNullAssertion,
+    ignoreObject,
+    ignoreEmptyType
   } = options || {};
 
   const { anys, fileCounts, totalCount, correctCount } = await lint(
@@ -52,7 +68,13 @@ const getCoverage = async (options?: Options): Promise<CoverageData> => {
       enableCache,
       ignoreUnreadAnys,
       fileCounts: true,
-      files
+      files,
+      ignoreNested,
+      ignoreAsAssertion,
+      ignoreTypeAssertion,
+      ignoreNonNullAssertion,
+      ignoreObject,
+      ignoreEmptyType
     }
   );
   const percentage = totalCount === 0 ? 100 : (correctCount * 100) / totalCount;
