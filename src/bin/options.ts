@@ -20,6 +20,7 @@ export type TypeCoverageConfig = {
   ignoreUnread?: boolean;
   reporters?: string[];
   historyFile?: string;
+  compare?: string;
   ignoreNested?: boolean;
   ignoreAsAssertion?: boolean;
   ignoreTypeAssertion?: boolean;
@@ -47,6 +48,7 @@ export type CliOptions = {
   ignoreNonNullAssertion?: boolean;
   ignoreObject?: boolean;
   ignoreEmptyType?: boolean;
+  compare?: string;
 };
 
 export type ResolvedOptions = {
@@ -62,6 +64,7 @@ export type ResolvedOptions = {
   files?: string[];
   reporters: ReporterName[];
   historyFile?: string;
+  compare?: string;
   ignoreNested: boolean;
   ignoreAsAssertion: boolean;
   ignoreTypeAssertion: boolean;
@@ -197,6 +200,7 @@ export const resolveOptions = (
       : undefined) ??
     DEFAULT_REPORTERS,
   historyFile: cli.historyFile ?? config.historyFile,
+  compare: cli.compare ?? config.compare,
   ignoreNested: cli.ignoreNested ?? config.ignoreNested ?? false,
   ignoreAsAssertion: cli.ignoreAsAssertion ?? config.ignoreAsAssertion ?? false,
   ignoreTypeAssertion:
@@ -251,6 +255,10 @@ export const createProgram = ({
     .option(
       "--history-file <path>",
       "append this run's totals to a JSON file, for tracking coverage over time"
+    )
+    .option(
+      "--compare <path>",
+      "compare against an earlier typescript-coverage.json and exit 3 if any file's coverage decreased"
     )
     .option(
       "--ignore-catch",

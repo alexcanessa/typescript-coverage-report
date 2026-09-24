@@ -92,6 +92,7 @@ The CLI accepts a list of arguments:
 | `--ignore-catch`              | Ignore type `any` for (try-)catch clause variables.                           | false          |
 | `-u, --ignore-unread`         | Allow writes to variables with implicit any types.                            | false          |
 | `-r, --reporters <list>`      | Which reporters to run: `text`, `html`, `json`, `lcov`, `cobertura`.          | text,html,json |
+| `--compare <path>`            | Exit 3 if any file decreased versus an earlier report.                        | none           |
 | `--history-file <path>`       | Append this run’s totals to a JSON file.                                      | none           |
 | `--ignore-nested`             | Ignore nested anys, such as `Promise<any>`.                                   | false          |
 | `--ignore-as-assertion`       | Ignore assertions such as `foo as string`.                                    | false          |
@@ -149,6 +150,31 @@ Uploading `lcov.info` is what lets Codecov, Coveralls or SonarQube tell you that
   with:
     files: coverage-ts/lcov.info
 ```
+
+### Failing when a file gets worse
+
+`--compare` checks this run against an earlier report and exits `3` if any individual file's coverage dropped — even when the overall threshold still passes.
+
+```yaml
+# on the base branch
+- run: npx typescript-coverage-report --reporters json --outputDir base
+
+# on the pull request
+- run: npx typescript-coverage-report --reporters json --compare base/typescript-coverage.json
+```
+
+```
+Type coverage went from 92.31% to 88.46%.
+
+1 file decreased:
+  src/parser.ts: 100.00% -> 62.50% (-37.50)
+```
+
+Percentages are compared rather than raw counts, so adding covered code to a file is never a regression. Files that are new since the baseline are ignored — the overall `--threshold` is what guards those.
+
+Exit codes: `0` fine, `2` below threshold, `3` a file decreased, `255` something went wrong.
+
+The tool deliberately knows nothing about git. You supply the baseline however suits you — a base-branch checkout, a stored CI artifact, or a committed file — which keeps this usable outside CI too.
 
 ### How line coverage is derived
 

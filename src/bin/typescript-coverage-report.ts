@@ -3,6 +3,7 @@
 import path from "node:path";
 import { IPackageJson } from "package-json-type";
 import generateCoverageReport from "../lib";
+import { formatComparison } from "../lib/compare";
 import {
   CliOptions,
   TypeCoverageConfig,
@@ -45,7 +46,18 @@ const options = resolveOptions(
 );
 
 generateCoverageReport(options)
-  .then(({ percentage }) => {
+  .then(({ percentage, comparison }) => {
+    if (comparison) {
+      console.log(formatComparison(comparison));
+
+      if (comparison.decreased.length > 0) {
+        // A distinct code from the threshold failure: a run can be above the
+        // threshold and still have made a file worse, and CI may want to
+        // treat the two differently.
+        process.exit(3);
+      }
+    }
+
     if (percentage < options.threshold) {
       console.error(
         `\nThe TypeScript coverage ${percentage.toFixed(
