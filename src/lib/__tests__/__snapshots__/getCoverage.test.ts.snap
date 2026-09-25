@@ -21,6 +21,7 @@ exports[`getCoverage function accepts a tsProjectFile option 2`] = `
   [
     "./app/tsconfig.json",
     {
+      "cacheDirectory": undefined,
       "debug": undefined,
       "enableCache": undefined,
       "fileCounts": true,
@@ -34,6 +35,9 @@ exports[`getCoverage function accepts a tsProjectFile option 2`] = `
       "ignoreObject": undefined,
       "ignoreTypeAssertion": undefined,
       "ignoreUnreadAnys": undefined,
+      "notOnlyInCWD": undefined,
+      "reportSemanticError": undefined,
+      "reportUnusedIgnore": undefined,
       "strict": undefined,
     },
   ],
@@ -45,6 +49,7 @@ exports[`getCoverage function defaults to root project when tsProjectFile is not
   [
     ".",
     {
+      "cacheDirectory": undefined,
       "debug": undefined,
       "enableCache": undefined,
       "fileCounts": true,
@@ -58,6 +63,9 @@ exports[`getCoverage function defaults to root project when tsProjectFile is not
       "ignoreObject": undefined,
       "ignoreTypeAssertion": undefined,
       "ignoreUnreadAnys": undefined,
+      "notOnlyInCWD": undefined,
+      "reportSemanticError": undefined,
+      "reportUnusedIgnore": undefined,
       "strict": undefined,
     },
   ],

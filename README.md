@@ -103,6 +103,10 @@ The CLI accepts a list of arguments:
 | `--ignore-non-null-assertion` | Ignore non-null assertions such as `foo!`.                                    | false          |
 | `--ignore-object`             | Ignore the `Object` type.                                                     | false          |
 | `--ignore-empty-type`         | Ignore the empty type `{}`.                                                   | false          |
+| `--report-semantic-error`     | Count TypeScript semantic errors as uncovered.                                | false          |
+| `--report-unused-ignore`      | Flag `type-coverage:ignore-line` comments that suppress nothing.              | false          |
+| `--cache-directory <path>`    | Where to store the cache, with `--cache`.                                     | default        |
+| `--not-only-in-cwd`           | Include files outside the working directory.                                  | false          |
 | `-v, --version`               | Print the version.                                                            |                |
 | `-h, --help`                  | Print the usage information.                                                  |                |
 

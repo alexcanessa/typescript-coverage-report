@@ -62,18 +62,18 @@ export default async function generateCoverageReport(
   const progress = createProgress();
   progress.update("Analysing types...");
 
+  // NOTE: Spread rather than listed field by field. The previous version
+  // forwarded an explicit whitelist, so every option added after it was
+  // parsed, documented, and then silently dropped here -- which is exactly
+  // what happened to the six --ignore-* flags added in 2.0.0. Only
+  // ignoreFiles needs special handling, because the output directory is
+  // appended to it.
   const raw = await getCoverage({
-    tsProjectFile: options.tsProjectFile,
-    strict: options.strict,
-    debug: options.debug,
+    ...options,
     ignoreFiles: withOutputDirIgnored(
       options.ignoreFiles,
       outputDirIgnoreGlob(options.outputDir)
-    ),
-    ignoreCatch: options.ignoreCatch,
-    ignoreUnread: options.ignoreUnread,
-    cache: options.cache,
-    files: options.files
+    )
   });
 
   // NOTE: Belt and braces. The ignore glob is an optimisation; it only

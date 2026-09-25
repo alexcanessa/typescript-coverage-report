@@ -33,6 +33,10 @@ export type Options = Partial<
     | "ignoreNonNullAssertion"
     | "ignoreObject"
     | "ignoreEmptyType"
+    | "reportSemanticError"
+    | "reportUnusedIgnore"
+    | "cacheDirectory"
+    | "notOnlyInCWD"
   > & {
     cache: LintOptions["enableCache"];
     ignoreUnread: LintOptions["ignoreUnreadAnys"];
@@ -55,7 +59,11 @@ const getCoverage = async (options?: Options): Promise<CoverageData> => {
     ignoreTypeAssertion,
     ignoreNonNullAssertion,
     ignoreObject,
-    ignoreEmptyType
+    ignoreEmptyType,
+    reportSemanticError,
+    reportUnusedIgnore,
+    cacheDirectory,
+    notOnlyInCWD
   } = options || {};
 
   const { anys, fileCounts, totalCount, correctCount } = await lint(
@@ -74,7 +82,11 @@ const getCoverage = async (options?: Options): Promise<CoverageData> => {
       ignoreTypeAssertion,
       ignoreNonNullAssertion,
       ignoreObject,
-      ignoreEmptyType
+      ignoreEmptyType,
+      reportSemanticError,
+      reportUnusedIgnore,
+      cacheDirectory,
+      notOnlyInCWD
     }
   );
   const percentage = totalCount === 0 ? 100 : (correctCount * 100) / totalCount;
