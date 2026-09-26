@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/alexcanessa/typescript-coverage-report/compare/2.1.0...2.1.1) (2026-09-26)
+
+
+### Bug Fixes
+
+* forward every option to the type checker ([#207](https://github.com/alexcanessa/typescript-coverage-report/issues/207)) ([313d58f](https://github.com/alexcanessa/typescript-coverage-report/commit/313d58f63630e5805deb3676413225ae47fff196))
+
 ## [2.1.0](https://github.com/alexcanessa/typescript-coverage-report/compare/2.0.0...2.1.0) (2026-09-24)
 
 
