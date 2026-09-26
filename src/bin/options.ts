@@ -29,6 +29,10 @@ export type TypeCoverageConfig = {
   ignoreNonNullAssertion?: boolean;
   ignoreObject?: boolean;
   ignoreEmptyType?: boolean;
+  reportSemanticError?: boolean;
+  reportUnusedIgnore?: boolean;
+  cacheDirectory?: string;
+  notOnlyInCWD?: boolean;
 };
 
 /** Exactly the flags the user typed; everything is optional. */
@@ -54,6 +58,10 @@ export type CliOptions = {
   compare?: string;
   respectGitignore?: boolean;
   allowEmpty?: boolean;
+  reportSemanticError?: boolean;
+  reportUnusedIgnore?: boolean;
+  cacheDirectory?: string;
+  notOnlyInCWD?: boolean;
 };
 
 export type ResolvedOptions = {
@@ -78,6 +86,10 @@ export type ResolvedOptions = {
   ignoreNonNullAssertion: boolean;
   ignoreObject: boolean;
   ignoreEmptyType: boolean;
+  reportSemanticError: boolean;
+  reportUnusedIgnore: boolean;
+  cacheDirectory?: string;
+  notOnlyInCWD: boolean;
 };
 
 export const DEFAULTS = {
@@ -217,7 +229,13 @@ export const resolveOptions = (
   ignoreNonNullAssertion:
     cli.ignoreNonNullAssertion ?? config.ignoreNonNullAssertion ?? false,
   ignoreObject: cli.ignoreObject ?? config.ignoreObject ?? false,
-  ignoreEmptyType: cli.ignoreEmptyType ?? config.ignoreEmptyType ?? false
+  ignoreEmptyType: cli.ignoreEmptyType ?? config.ignoreEmptyType ?? false,
+  reportSemanticError:
+    cli.reportSemanticError ?? config.reportSemanticError ?? false,
+  reportUnusedIgnore:
+    cli.reportUnusedIgnore ?? config.reportUnusedIgnore ?? false,
+  cacheDirectory: cli.cacheDirectory ?? config.cacheDirectory,
+  notOnlyInCWD: cli.notOnlyInCWD ?? config.notOnlyInCWD ?? false
 });
 
 /**
@@ -298,6 +316,22 @@ export const createProgram = ({
     )
     .option("--ignore-object", "ignore the Object type")
     .option("--ignore-empty-type", "ignore the empty type {}")
+    .option(
+      "--report-semantic-error",
+      "count TypeScript semantic errors as uncovered"
+    )
+    .option(
+      "--report-unused-ignore",
+      "flag type-coverage:ignore-line comments that no longer suppress anything"
+    )
+    .option(
+      "--cache-directory <path>",
+      "where to store the cache, with --cache"
+    )
+    .option(
+      "--not-only-in-cwd",
+      "include files outside the working directory, such as linked packages"
+    )
     .argument(
       "[files...]",
       "only check these files, useful with tools like lint-staged"

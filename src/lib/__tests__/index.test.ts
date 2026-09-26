@@ -219,3 +219,67 @@ describe("comparison", () => {
     expect(result).not.toHaveProperty("comparison");
   });
 });
+
+describe("option forwarding", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(console, "log").mockImplementation(() => undefined);
+    mockedGetCoverage.mockResolvedValue(coverage());
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  // Every option that reaches type-coverage-core. The orchestrator used to
+  // forward an explicit whitelist, so options added later were parsed,
+  // documented, and then silently dropped -- which is what happened to the
+  // six --ignore-* flags in 2.0.0. This asserts the whole surface so a new
+  // option cannot go missing without a test failing.
+  const CORE_OPTIONS = {
+    strict: true,
+    debug: true,
+    cache: true,
+    ignoreCatch: true,
+    ignoreUnread: true,
+    ignoreNested: true,
+    ignoreAsAssertion: true,
+    ignoreTypeAssertion: true,
+    ignoreNonNullAssertion: true,
+    ignoreObject: true,
+    ignoreEmptyType: true,
+    reportSemanticError: true,
+    reportUnusedIgnore: true,
+    notOnlyInCWD: true,
+    cacheDirectory: ".cache",
+    tsProjectFile: "./tsconfig.build.json"
+  };
+
+  it.each(Object.entries(CORE_OPTIONS))(
+    "forwards %s to getCoverage",
+    async (key, value) => {
+      await generateCoverageReport({
+        outputDir: "coverage-ts",
+        threshold: 80,
+        [key]: value
+      });
+
+      expect(mockedGetCoverage).toHaveBeenCalledWith(
+        expect.objectContaining({ [key]: value })
+      );
+    }
+  );
+
+  it("still appends the output directory to ignoreFiles", async () => {
+    // The one option that is not forwarded verbatim.
+    await generateCoverageReport({
+      outputDir: "coverage-ts",
+      threshold: 80,
+      ignoreFiles: ["vendor/**"]
+    });
+
+    expect(mockedGetCoverage).toHaveBeenCalledWith(
+      expect.objectContaining({ ignoreFiles: ["vendor/**", "coverage-ts/**"] })
+    );
+  });
+});
