@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.1.2](https://github.com/alexcanessa/typescript-coverage-report/compare/2.1.1...2.1.2) (2026-09-28)
+
+
+### Bug Fixes
+
+* keep report output inside the output directory ([#211](https://github.com/alexcanessa/typescript-coverage-report/issues/211)) ([50d884d](https://github.com/alexcanessa/typescript-coverage-report/commit/50d884dc8eef54cc30de891ce082eb7fca5b289f))
+* make --compare usable and let output flush before exiting ([#213](https://github.com/alexcanessa/typescript-coverage-report/issues/213)) ([ef312e3](https://github.com/alexcanessa/typescript-coverage-report/commit/ef312e312df8f755c830d8f0806ab04fc18b8731))
+* report config errors instead of discarding the config ([#212](https://github.com/alexcanessa/typescript-coverage-report/issues/212)) ([0bab6e4](https://github.com/alexcanessa/typescript-coverage-report/commit/0bab6e4ed60d57c57889fc79943810b5153bc730))
+* validate config files and honour --not-only-in-cwd ([#209](https://github.com/alexcanessa/typescript-coverage-report/issues/209)) ([c268dcc](https://github.com/alexcanessa/typescript-coverage-report/commit/c268dcc2398a67be777c3b14bb18d29d0d544180))
+
 ## [2.1.1](https://github.com/alexcanessa/typescript-coverage-report/compare/2.1.0...2.1.1) (2026-09-26)
 
 
