@@ -200,3 +200,52 @@ describe("readBaseline", () => {
     await expect(readBaseline(file)).rejects.toThrow();
   });
 });
+
+describe("readBaseline rejects files that merely look like JSON objects", () => {
+  // The guard used to be "is it an object", which package.json, {} and []
+  // all satisfy. The comparison then ran against an empty baseline: every
+  // file read as new, nothing could decrease, and the run reported
+  // "went from 0.00% to 100.00%. No file decreased." -- green, always.
+  let workspace: string;
+
+  const write = (contents: unknown): string => {
+    const file = nodePath.join(workspace, "b.json");
+
+    fs.writeFileSync(file, JSON.stringify(contents));
+
+    return file;
+  };
+
+  beforeEach(() => {
+    workspace = fs.mkdtempSync(nodePath.join(os.tmpdir(), "tcr-baseline2-"));
+  });
+
+  afterEach(() => {
+    fs.rmSync(workspace, { recursive: true, force: true });
+  });
+
+  it.each([
+    ["an empty object", {}],
+    ["an array", []],
+    ["a package.json", { name: "x", version: "1.0.0", dependencies: {} }],
+    ["fileCounts of the wrong type", { fileCounts: "lots" }],
+    ["a null fileCounts", { fileCounts: null }],
+    ["an array fileCounts", { fileCounts: [] }]
+  ])("rejects %s", async (_label, contents) => {
+    await expect(readBaseline(write(contents))).rejects.toThrow(
+      /not a coverage report/
+    );
+  });
+
+  it("names the missing key and says where a real report comes from", async () => {
+    await expect(readBaseline(write({ percentage: 80 }))).rejects.toThrow(
+      /it has no "fileCounts".*typescript-coverage\.json.*json reporter/s
+    );
+  });
+
+  it("accepts a report whose fileCounts is empty but present", async () => {
+    await expect(
+      readBaseline(write({ percentage: 100, fileCounts: {} }))
+    ).resolves.toMatchObject({ percentage: 100 });
+  });
+});
