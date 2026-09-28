@@ -52,6 +52,17 @@ export default async function generateCoverageReport(
 
   assertSafeOutputDir(options.outputDir);
 
+  // NOTE: Read before the output directory is cleared, two lines down. The
+  // obvious file to compare against is the previous run's own report, which
+  // the json reporter writes *inside* that directory -- so reading it at the
+  // end meant the most natural invocation of the feature,
+  // `--compare coverage-ts/typescript-coverage.json`, died with a raw ENOENT
+  // for a file this function had itself just deleted. Reading it up front
+  // also fails fast, before the type check, when the path is simply wrong.
+  const baseline = options.compare
+    ? await readBaseline(options.compare)
+    : undefined;
+
   // NOTE: The previous run's output has to go before the type check, not
   // after it. Leaving it in place meant type-coverage-core reported the
   // report's own JSON and assets as source files, and the HTML reporter then
@@ -124,10 +135,10 @@ export default async function generateCoverageReport(
     await appendHistory(data, options.historyFile, options.generatedAt);
   }
 
-  if (options.compare) {
+  if (baseline) {
     return {
       ...data,
-      comparison: compareToBaseline(data, await readBaseline(options.compare))
+      comparison: compareToBaseline(data, baseline)
     };
   }
 

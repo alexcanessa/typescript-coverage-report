@@ -74,11 +74,30 @@ export const readBaseline = async (
   const contents = await fs.promises.readFile(resolved, "utf-8");
   const parsed: unknown = JSON.parse(contents);
 
-  if (typeof parsed !== "object" || parsed === null) {
+  if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
     throw new Error(`${baselineFile} is not a coverage report.`);
   }
 
-  return parsed as BaselineFile;
+  const baseline = parsed as BaselineFile;
+
+  // "is it an object" was not enough: package.json, {} and [] all passed, and
+  // the comparison then ran against an empty baseline. Every file reads as
+  // new, nothing can decrease, and the run prints the reassuring "Type
+  // coverage went from 0.00% to 92.31%. No file decreased." -- a gate that
+  // cannot fail, which is worse than no gate, because CI shows it green.
+  if (
+    typeof baseline.fileCounts !== "object" ||
+    baseline.fileCounts === null ||
+    Array.isArray(baseline.fileCounts)
+  ) {
+    throw new Error(
+      `${baselineFile} is not a coverage report: it has no "fileCounts". ` +
+        "Point --compare at a typescript-coverage.json written by the json " +
+        "reporter."
+    );
+  }
+
+  return baseline;
 };
 
 export const formatComparison = ({
