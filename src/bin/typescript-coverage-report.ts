@@ -4,15 +4,13 @@ import { IPackageJson } from "package-json-type";
 import generateCoverageReport from "../lib";
 import { formatComparison } from "../lib/compare";
 import { CliOptions, createProgram, resolveOptions } from "./options";
-import { loadConfig } from "./config";
+import { configPathFromArgv, loadConfig } from "./config";
 
 const { version, description }: IPackageJson = require("../../package.json");
 
 // NOTE: Read --config before commander parses, because the config supplies
 // the defaults commander would otherwise be describing in --help.
-const configPath = process.argv.includes("--config")
-  ? process.argv[process.argv.indexOf("--config") + 1]
-  : undefined;
+const configPath = configPathFromArgv(process.argv);
 
 let config;
 
@@ -32,11 +30,17 @@ const program = createProgram({
 
 program.parse();
 
-const options = resolveOptions(
-  program.opts<CliOptions>(),
-  config,
-  program.args
-);
+let options;
+
+try {
+  options = resolveOptions(program.opts<CliOptions>(), config, program.args);
+} catch (error) {
+  // resolveOptions still parses config-supplied values, and it runs after
+  // commander has handed back control -- so without this a bad value in a
+  // config file surfaced as a raw stack trace rather than a usage error.
+  console.error(`error: ${(error as Error).message}`);
+  process.exit(1);
+}
 
 generateCoverageReport(options)
   .then(({ percentage, comparison, fileCounts }) => {
