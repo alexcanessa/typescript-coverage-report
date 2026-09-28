@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { CoverageData } from "../getCoverage";
 import { lineCoverageForFile, uncoveredLinesByFile } from "./lineCoverage";
-import { toPosixPath } from "./paths";
+import { toPosixPath, toSafeSegments } from "./paths";
 
 type Options = {
   outputDir: string;
@@ -70,7 +70,9 @@ export const generate = async (
     totalHit += hit;
 
     // Cobertura packages map to directories; "." keeps root files valid.
-    const packageName = path.dirname(filename).split(path.sep).join(".") || ".";
+    // Segments are normalised first, or a file outside the working directory
+    // would be filed under the unreadable package "...pkg".
+    const packageName = toSafeSegments(path.dirname(filename)).join(".") || ".";
     const classes = byPackage.get(packageName) ?? [];
 
     classes.push({

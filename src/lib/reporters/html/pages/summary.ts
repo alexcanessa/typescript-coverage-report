@@ -1,4 +1,4 @@
-import { escapeHTML, toURLPath } from "../escape";
+import { escapeHTML, toPagePath, toURLPath } from "../escape";
 import type { CoverageData } from "../../../getCoverage";
 
 type GenerateSummaryPageContext = Omit<CoverageData, "anys"> & {
@@ -20,7 +20,7 @@ const generateSummaryTableRow = ({
   const percentageCoverage = percentage.toFixed(2) + "%";
   const isValid = percentage >= threshold;
 
-  const pathToFile = toURLPath(`files/${filename}.html`);
+  const pathToFile = toURLPath(`files/${toPagePath(filename)}.html`);
 
   return `
     <tr class="${isValid ? "positive" : "negative"}">

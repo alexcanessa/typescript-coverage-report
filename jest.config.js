@@ -18,10 +18,10 @@ module.exports = {
   // lower this number without lowering real coverage.
   coverageThreshold: {
     global: {
-      statements: 84,
-      branches: 80,
-      functions: 86,
-      lines: 84
+      statements: 89,
+      branches: 84,
+      functions: 92,
+      lines: 89
     }
   }
 };
