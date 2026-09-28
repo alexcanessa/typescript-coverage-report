@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { REPORTER_NAMES, isReporterName } from "../lib/reporters";
 import type { TypeCoverageConfig } from "./options";
 
 /**
@@ -76,6 +77,42 @@ const EXPECTED_LABEL: Record<string, string> = {
 };
 
 /**
+ * Checks that go beyond the value's type, mirroring what commander already
+ * enforces for the matching flag.
+ *
+ * Without them a config file is the softer path into the same tool: commander
+ * rejects `--threshold -1`, while `"atLeast": -1` was accepted and silently
+ * disabled the gate the option exists to provide. An unknown reporter name
+ * was worse -- it reached parseReporters inside resolveOptions, which runs
+ * outside the try/catch around loadConfig, so the user got a stack trace.
+ */
+// The cast in each refinement is safe: isValid has already confirmed the type
+// by the time one runs, and a key with no SCHEMA entry never reaches here.
+const REFINEMENTS: Record<string, (value: unknown) => string | undefined> = {
+  atLeast: (value) => {
+    const threshold = value as number;
+
+    return threshold < 0 || threshold > 100
+      ? `must be a percentage between 0 and 100, got ${threshold}`
+      : undefined;
+  },
+  reporters: (value) => {
+    const names = value as string[];
+
+    if (names.length === 0) {
+      return `must name at least one of: ${REPORTER_NAMES.join(", ")}`;
+    }
+
+    const unknown = names.filter((name) => !isReporterName(name));
+
+    return unknown.length > 0
+      ? `has unknown reporter${unknown.length > 1 ? "s" : ""} ` +
+          `${unknown.join(", ")}; available: ${REPORTER_NAMES.join(", ")}`
+      : undefined;
+  }
+};
+
+/**
  * Reject a malformed config with an explanation instead of letting it reach
  * the rest of the tool.
  *
@@ -118,6 +155,14 @@ export const validateConfig = (
       problems.push(
         `"${key}" must be ${EXPECTED_LABEL[expected]}, got ${describe(value)}`
       );
+
+      continue;
+    }
+
+    const refined = REFINEMENTS[key]?.(value);
+
+    if (refined) {
+      problems.push(`"${key}" ${refined}`);
     }
   }
 
@@ -167,24 +212,30 @@ const readJSONFile = (file: string): unknown => {
 };
 
 const readPackageJSON = (cwd: string): TypeCoverageConfig => {
+  let config: TypeCoverageConfig;
+
   try {
     const parsed = readJSONFile(path.join(cwd, "package.json")) as {
       typeCoverage?: TypeCoverageConfig;
     };
 
-    const config = parsed.typeCoverage ?? {};
-
-    validateConfig(
-      config as Record<string, unknown>,
-      "package.json typeCoverage"
-    );
-
-    return config;
+    config = parsed.typeCoverage ?? {};
   } catch {
     // No package.json, or one we cannot read, is normal: the CLI must still
     // run in a bare directory.
     return {};
   }
+
+  // Deliberately outside that catch. Validation used to sit inside it, so a
+  // block with one bad key threw, was swallowed, and the run silently
+  // discarded every *other* key in the block as well -- no error, no
+  // settings, just defaults.
+  validateConfig(
+    config as Record<string, unknown>,
+    "package.json typeCoverage"
+  );
+
+  return config;
 };
 
 /**
@@ -223,4 +274,31 @@ export const loadConfig = (
   }
 
   return readPackageJSON(cwd);
+};
+
+/**
+ * Find the --config value in argv, before commander has parsed anything.
+ *
+ * The config supplies the defaults --help would describe, so it has to be
+ * read first. Matching only the exact token `--config` missed the equally
+ * valid `--config=./ci.json`, and the run then silently used auto-discovery
+ * or package.json instead of the file the user named.
+ *
+ * A bare trailing `--config` yields undefined on purpose: commander reports a
+ * missing option-argument better than this could.
+ */
+export const configPathFromArgv = (argv: string[]): string | undefined => {
+  const index = argv.findIndex(
+    (arg) => arg === "--config" || arg.startsWith("--config=")
+  );
+
+  if (index === -1) {
+    return undefined;
+  }
+
+  const value = argv[index].startsWith("--config=")
+    ? argv[index].slice("--config=".length)
+    : argv[index + 1];
+
+  return value === "" ? undefined : value;
 };
