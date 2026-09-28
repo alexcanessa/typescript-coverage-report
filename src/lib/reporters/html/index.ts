@@ -4,7 +4,7 @@ import { promisify } from "util";
 import { CoverageData } from "../../getCoverage";
 import { generateSummaryPage } from "./pages/summary";
 import { generateDetailsPage } from "./pages/details";
-import { escapeHTML, relativeToRoot, toURLPath } from "./escape";
+import { escapeHTML, relativeToRoot, toPagePath, toURLPath } from "./escape";
 import {
   CODEMIRROR_CSS,
   CODEMIRROR_JAVASCRIPT_MODE_JS,
@@ -122,12 +122,17 @@ export const generate = async (
   for (const [filename, { totalCount, correctCount }] of Array.from(
     data.fileCounts
   )) {
-    await mkdir(path.join(options.outputDir, "files", path.dirname(filename)), {
+    // Sanitised before it touches the filesystem: with --not-only-in-cwd the
+    // type checker reports a linked package as ../../pkg/a.ts, and joining
+    // that onto the output directory writes the page outside it.
+    const pagePath = toPagePath(filename);
+
+    await mkdir(path.join(options.outputDir, "files", path.dirname(pagePath)), {
       recursive: true
     });
 
     const annotations = data.anys.filter(({ file }) => file === filename);
-    const assetsFolder = `${relativeToRoot(filename)}assets`;
+    const assetsFolder = `${relativeToRoot(pagePath)}assets`;
 
     // NOTE: A file listed by the type checker may not be readable by the time
     // we get here. Degrade to skipping its detail page rather than aborting
@@ -164,7 +169,7 @@ export const generate = async (
     );
 
     await writeFile(
-      path.join(options.outputDir, "files", `${filename}.html`),
+      path.join(options.outputDir, "files", `${pagePath}.html`),
       detailContent
     );
   }

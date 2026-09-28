@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { generate as generateLcov } from "../lcov";
 import { generate as generateCobertura } from "../cobertura";
-import { toPosixPath } from "../paths";
+import { toPosixPath, toSafeSegments } from "../paths";
 import type { CoverageData } from "../../getCoverage";
 
 let workspace: string;
@@ -234,5 +234,78 @@ describe("toPosixPath", () => {
   it("converts backslashes and leaves posix paths alone", () => {
     expect(toPosixPath("src\\lib\\a.ts")).toBe("src/lib/a.ts");
     expect(toPosixPath("src/lib/a.ts")).toBe("src/lib/a.ts");
+  });
+});
+
+describe("paths outside the working directory", () => {
+  // With --not-only-in-cwd the type checker reports a linked package as
+  // ../pkg/a.ts. Joining those segments with dots produced "...pkg".
+  let root: string;
+  let projectDir: string;
+  let cwdBefore: string;
+
+  const outside: CoverageData = {
+    fileCounts: new Map([["../pkg/a.ts", { correctCount: 1, totalCount: 2 }]]),
+    anys: [
+      { file: "../pkg/a.ts", line: 3, character: 13, text: "untyped", kind: 1 }
+    ],
+    percentage: 50,
+    total: 2,
+    covered: 1,
+    uncovered: 1
+  } as unknown as CoverageData;
+
+  beforeEach(() => {
+    cwdBefore = process.cwd();
+    root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), "tcr-out-")));
+    projectDir = path.join(root, "project");
+    fs.mkdirSync(path.join(root, "pkg"), { recursive: true });
+    fs.mkdirSync(projectDir, { recursive: true });
+    fs.writeFileSync(path.join(root, "pkg", "a.ts"), SOURCE);
+    process.chdir(projectDir);
+  });
+
+  afterEach(() => {
+    process.chdir(cwdBefore);
+    fs.rmSync(root, { recursive: true, force: true });
+  });
+
+  it("names the package without a run of dots", async () => {
+    await generateCobertura(outside, { outputDir: projectDir });
+    const xml = fs.readFileSync(
+      path.join(projectDir, "cobertura-coverage.xml"),
+      "utf-8"
+    );
+
+    expect(xml).toContain('<package name="__.pkg"');
+    expect(xml).not.toContain("...pkg");
+  });
+
+  it("still records the file under its real relative path", async () => {
+    await generateCobertura(outside, { outputDir: projectDir });
+    const xml = fs.readFileSync(
+      path.join(projectDir, "cobertura-coverage.xml"),
+      "utf-8"
+    );
+
+    expect(xml).toContain('filename="../pkg/a.ts"');
+  });
+});
+
+describe("toSafeSegments", () => {
+  it.each([
+    ["src/a.ts", ["src", "a.ts"]],
+    ["./src/a.ts", ["src", "a.ts"]],
+    ["../pkg/a.ts", ["__", "pkg", "a.ts"]],
+    ["../../x/a.ts", ["__", "__", "x", "a.ts"]],
+    ["/abs/a.ts", ["abs", "a.ts"]],
+    ["src\\a.ts", ["src", "a.ts"]],
+    ["C:\\src\\a.ts", ["C", "src", "a.ts"]]
+  ])("normalises %s", (value, expected) => {
+    expect(toSafeSegments(value)).toEqual(expected);
+  });
+
+  it("leaves a .. that is only part of a name", () => {
+    expect(toSafeSegments("..foo/a..b.ts")).toEqual(["..foo", "a..b.ts"]);
   });
 });
