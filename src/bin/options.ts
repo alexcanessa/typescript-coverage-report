@@ -32,6 +32,9 @@ export type TypeCoverageConfig = {
   reportSemanticError?: boolean;
   reportUnusedIgnore?: boolean;
   cacheDirectory?: string;
+  // Both spellings are accepted: notOnlyInCwd matches the flag, and
+  // notOnlyInCWD matches type-coverage's own naming.
+  notOnlyInCwd?: boolean;
   notOnlyInCWD?: boolean;
 };
 
@@ -61,7 +64,9 @@ export type CliOptions = {
   reportSemanticError?: boolean;
   reportUnusedIgnore?: boolean;
   cacheDirectory?: string;
-  notOnlyInCWD?: boolean;
+  // commander derives this from --not-only-in-cwd, so the casing differs
+  // from type-coverage-core's notOnlyInCWD.
+  notOnlyInCwd?: boolean;
 };
 
 export type ResolvedOptions = {
@@ -235,7 +240,8 @@ export const resolveOptions = (
   reportUnusedIgnore:
     cli.reportUnusedIgnore ?? config.reportUnusedIgnore ?? false,
   cacheDirectory: cli.cacheDirectory ?? config.cacheDirectory,
-  notOnlyInCWD: cli.notOnlyInCWD ?? config.notOnlyInCWD ?? false
+  notOnlyInCWD:
+    cli.notOnlyInCwd ?? config.notOnlyInCwd ?? config.notOnlyInCWD ?? false
 });
 
 /**
