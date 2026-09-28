@@ -13,15 +13,16 @@ module.exports = {
   },
   // Floored from the measured value. Ratchet up, never down -- with one
   // documented exception: src/bin/typescript-coverage-report.ts is an entry
-  // script whose branches end in process.exit, so it is exercised by the
-  // packaged end-to-end test rather than by jest. Adding logic there can
-  // lower this number without lowering real coverage.
+  // script that runs on import, so it is exercised by the packaged
+  // end-to-end test rather than by jest. Adding logic there can lower these
+  // numbers without lowering real coverage, which is what wrapping its body
+  // in main() did: one more uncovered function, no less tested behaviour.
   coverageThreshold: {
     global: {
-      statements: 91,
+      statements: 90,
       branches: 87,
-      functions: 96,
-      lines: 91
+      functions: 95,
+      lines: 90
     }
   }
 };

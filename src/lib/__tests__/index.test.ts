@@ -218,6 +218,36 @@ describe("comparison", () => {
     expect(readBaseline).not.toHaveBeenCalled();
     expect(result).not.toHaveProperty("comparison");
   });
+
+  it("reads the baseline before clearing the output directory", async () => {
+    // The obvious baseline is the previous run's own report, which the json
+    // reporter writes inside the output directory. Reading it after the rm
+    // meant --compare coverage-ts/typescript-coverage.json died with an
+    // ENOENT for a file this function had just deleted.
+    await generateCoverageReport({
+      outputDir: "coverage-ts",
+      threshold: 80,
+      compare: "coverage-ts/typescript-coverage.json"
+    });
+
+    expect(
+      (readBaseline as jest.Mock).mock.invocationCallOrder[0]
+    ).toBeLessThan(rm.mock.invocationCallOrder[0]);
+  });
+
+  it("fails before the type check when the baseline cannot be read", async () => {
+    (readBaseline as jest.Mock).mockRejectedValueOnce(new Error("nope"));
+
+    await expect(
+      generateCoverageReport({
+        outputDir: "coverage-ts",
+        threshold: 80,
+        compare: "missing.json"
+      })
+    ).rejects.toThrow("nope");
+
+    expect(mockedGetCoverage).not.toHaveBeenCalled();
+  });
 });
 
 describe("option forwarding", () => {
