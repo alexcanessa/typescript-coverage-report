@@ -19,7 +19,7 @@ importers:
         version: 14.0.3
       type-coverage-core:
         specifier: ^2.30.1
-        version: 2.30.1(typescript@6.0.3)
+        version: 2.30.4(typescript@6.0.3)
     devDependencies:
       '@babel/core':
         specifier: ^7.29.7
@@ -2367,8 +2367,8 @@ packages:
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
-  react-is@19.3.0:
-    resolution: {integrity: sha512-UpMYezM4v5/18F28aC66AEsjXIgE02kyEMH6yLdgLXu/UTfa1Ntwck/nNLrbqJsEXW7gPb0coNO9FQse9WTovA==}
+  react-is@19.3.1:
+    resolution: {integrity: sha512-RRieF6IyxQBkcK6pP8xOHprLTPW6QjRkbGdImtqNme+/hYVwCZkLQLdlZGOhUqXwkS9IEynaGvPJtv6XB/cz0Q==}
 
   regenerate-unicode-properties@10.2.2:
     resolution: {integrity: sha512-m03P+zhBeQd1RGnYxrGyDAPpWX/epKirLrp8e3qevZdVkKtnCrjjWczIbYc8+xd6vcTStVlqfycTx1KR4LOr0g==}
@@ -2568,8 +2568,8 @@ packages:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
 
-  type-coverage-core@2.30.1:
-    resolution: {integrity: sha512-TFzqUvaZW5bTpKGBj3FwN8bYLsWA/smTOslISDg9rBMrpn5KadMQy9l3q068q+dXkn27CAdyfGTDlsH0PguG3A==}
+  type-coverage-core@2.30.4:
+    resolution: {integrity: sha512-GCea6j/FCuV5I3j4HWjfbAlhw6VghHE2uEMzn2nn7nVUURP1EWNE7eMzziMXoYfF1q4nAUg6a5rKK/Ch8GwbUg==}
     peerDependencies:
       typescript: 2 || 3 || 4 || 5 || 6 || 7
 
@@ -5357,7 +5357,7 @@ snapshots:
   pretty-format@30.5.1:
     dependencies:
       '@jest/react-is-18': react-is@18.3.1
-      '@jest/react-is-19': react-is@19.3.0
+      '@jest/react-is-19': react-is@19.3.1
       '@jest/schemas': 30.5.0
       ansi-styles: 5.2.0
 
@@ -5373,7 +5373,7 @@ snapshots:
 
   react-is@18.3.1: {}
 
-  react-is@19.3.0: {}
+  react-is@19.3.1: {}
 
   regenerate-unicode-properties@10.2.2:
     dependencies:
@@ -5552,7 +5552,7 @@ snapshots:
     dependencies:
       prelude-ls: 1.2.1
 
-  type-coverage-core@2.30.1(typescript@6.0.3):
+  type-coverage-core@2.30.4(typescript@6.0.3):
     dependencies:
       fast-glob: 3.3.3
       minimatch: 10.2.6
